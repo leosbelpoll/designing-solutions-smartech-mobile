@@ -4,7 +4,10 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { SplashScreen } from "expo";
 import * as Font from "expo-font";
 import * as React from "react";
-import { Platform, StatusBar, StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, AsyncStorage, Vibration, Alert } from "react-native";
+import { Notifications } from 'expo';
+import * as Permissions from 'expo-permissions';
+import Constants from 'expo-constants';
 
 import Login from "./screens/Login";
 import Projects from "./screens/Projects";
@@ -13,11 +16,73 @@ import Form from "./screens/Form";
 import Footer from "./components/Footer";
 import Vehicle from "./screens/Vehicle";
 import Camera from "./screens/Camera";
+import { PUSH_NOTIFICATION_TOKEN, PUSH_NOTIFICATION_TOKEN_IN_SERVER, ACCESS_TOKEN_IDENTIFIER, USER_NAME, API_URL } from "./configs";
 
 const Stack = createStackNavigator();
 
 export default function App(props) {
 	const [isLoadingComplete, setLoadingComplete] = React.useState(false);
+
+	const registerForPushNotificationsAsync = async () => {
+		AsyncStorage.getItem(PUSH_NOTIFICATION_TOKEN)
+			.then(async (notifToken) => {
+				AsyncStorage.getItem(PUSH_NOTIFICATION_TOKEN_IN_SERVER)
+					.then(async (notifTokenInServer) => {
+						if (notifToken == null || notifTokenInServer == null) {
+							if (Constants.isDevice) {
+								const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+								let finalStatus = existingStatus;
+								if (existingStatus !== 'granted') {
+									const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+									finalStatus = status;
+								}
+								if (finalStatus !== 'granted') {
+									Alert.alert('Error configurando las notificaciones!');
+									return;
+								}
+								const notificationToken = await Notifications.getExpoPushTokenAsync();
+								AsyncStorage.setItem(PUSH_NOTIFICATION_TOKEN, notificationToken);
+								AsyncStorage.getItem(ACCESS_TOKEN_IDENTIFIER)
+									.then(async (token) => {
+										AsyncStorage.getItem(USER_NAME)
+											.then(async (username) => {
+
+												fetch(`${API_URL}/set-push-notification-token`, {
+													method: "POST",
+													body: JSON.stringify({
+														username,
+														token: notificationToken
+													}),
+													headers: {
+														Accept: "application/json",
+														"Content-Type": "application/json",
+														Authorization: `Bearer ${token}`
+													}
+												})
+													.then((res) => res.json())
+													.then(() => AsyncStorage.setItem(PUSH_NOTIFICATION_TOKEN_IN_SERVER, "true"));
+											})
+											.done();
+									})
+									.done();
+
+							} else {
+								Alert.alert('Debe usar un dispositivo fisico');
+							}
+							if (Platform.OS === 'android') {
+								Notifications.createChannelAndroidAsync('default', {
+									name: 'default',
+									sound: true,
+									priority: 'max',
+									vibrate: [0, 250, 250, 250],
+								});
+							}
+						}
+					})
+					.done();
+			})
+			.done();
+	};
 
 	// Load any resources or data that we need prior to rendering the app
 	React.useEffect(() => {
@@ -40,7 +105,21 @@ export default function App(props) {
 		}
 
 		loadResourcesAndDataAsync();
+
+		registerForPushNotificationsAsync();
+
+		// Handle notifications that are received or selected while the app
+		// is open. If the app was closed and then opened by tapping the
+		// notification (rather than just tapping the app icon to open it),
+		// this function will fire on the next tick after the app starts
+		// with the notification data.
+		Notifications.addListener(_handleNotification);
 	}, []);
+
+	const _handleNotification = notification => {
+		Vibration.vibrate();
+		// Do something with the notification.data
+	};
 
 	if (!isLoadingComplete && !props.skipLoadingScreen) {
 		return null;
