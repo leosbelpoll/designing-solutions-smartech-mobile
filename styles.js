@@ -1,12 +1,12 @@
 import { StyleSheet } from "react-native";
 
 export const COLOR_PRIMARY = "#b7c62f";
-export const COLOR_ERROR = "rgba(117, 22, 25, 1)";
-export const COLOR_SUCCESS = "rgba(133, 145, 54, 1)";
+export const COLOR_ERROR = "rgb(238,87,55)";
+export const COLOR_SUCCESS = "rgb(110,175,55)";
 export const COLOR_LIGHT = "white";
-export const COLOR_DARK = "rgba(0,0,0,0.7)";
-export const COLOR_LIGHT_GREY = "rgba(0,0,0,0.2)";
-export const COLOR_DARK_GREY = "rgba(0,0,0,0.7)";
+export const COLOR_DARK = "rgb(49,47,45)";
+export const COLOR_LIGHT_GREY = "rgb(211,211,210)";
+export const COLOR_DARK_GREY = "rgb(163,162,161)";
 
 const BORDER_RADIUS = 15;
 
@@ -106,6 +106,21 @@ export default StyleSheet.create({
   },
   floatRight: {
     alignItems: "flex-end",
+  },
+  modal: {
+    marginTop: 22,
+    marginHorizontal: 20,
+    backgroundColor: COLOR_LIGHT_GREY,
+    padding: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  floatLeft: {
+    alignItems: "flex-start",
+  },
+  guideImage: {
+    alignItems: "flex-start",
+    marginTop: 300,
   },
   buttonEmptyFile: {
     backgroundColor: COLOR_LIGHT_GREY,

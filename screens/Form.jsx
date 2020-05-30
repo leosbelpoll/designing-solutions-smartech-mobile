@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, TouchableOpacity, View, TextInput, AsyncStorage, Alert, CheckBox } from "react-native";
+import { Modal, Image, Text, TouchableOpacity, TouchableHighlight, View, TextInput, AsyncStorage, Alert, CheckBox } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Picker } from "@react-native-community/picker";
 import * as Permissions from "expo-permissions";
@@ -8,7 +8,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 import Header from "../components/Header";
 import styles from "../styles";
-import { API_URL, ACCESS_TOKEN_IDENTIFIER, USER_NAME } from "../configs";
+import { API_URL, ACCESS_TOKEN_IDENTIFIER, USER_NAME, BASE_URL } from "../configs";
 import Loading from "./Loading";
 
 export default function Form(props) {
@@ -20,6 +20,7 @@ export default function Form(props) {
     const [isValidating, setIsValidating] = useState(false);
     const [isInvalidForm, setIsInvalidForm] = useState(false);
     const [showDate, setShowDate] = useState(false);
+    const [showModalGuideImage, setShowModalGuideImage] = useState({});
 
     const { formulario } = standard;
 
@@ -366,20 +367,47 @@ export default function Form(props) {
                                 )}
                                 {field.type === "IMAGE" && (
                                     <>
-                                        <View style={styles.floatRight}>
-                                            <TouchableOpacity
-                                                style={innerForm[field.id] && innerForm[field.id] ? styles.buttonFile : styles.buttonEmptyFile}
-                                                onPress={async () => {
-                                                    const setImage = (uri) => {
-                                                        updateFieldInnerForm(field.id, uri);
-                                                    };
-                                                    props.navigation.navigate("Camera", {
-                                                        operation: setImage
-                                                    });
-                                                }}
-                                            >
-                                                <Text style={styles.textLight}>Seleccionar imágen</Text>
-                                            </TouchableOpacity>
+                                        <Modal
+                                            animationType="fade"
+                                            transparent={true}
+                                            visible={!!showModalGuideImage[field.id]}
+                                            onRequestClose={() => setShowModalGuideImage({
+                                                ...showModalGuideImage,
+                                                [field.id]: false
+                                            })}>
+                                            <View style={styles.modal}>
+                                                <View>
+                                                    <TouchableHighlight onPress={() => setShowModalGuideImage({
+                                                        ...showModalGuideImage,
+                                                        [field.id]: false
+                                                    })}><Image source={{ uri: BASE_URL + "/app/public/" + field["guide_image"] }}
+                                                        style={{ width: 300, height: 300 }} /></TouchableHighlight>
+                                                </View>
+                                            </View>
+                                        </Modal>
+                                        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                                            <View>
+                                                {field["guide_image"] && <TouchableHighlight onPress={() => setShowModalGuideImage({
+                                                    ...showModalGuideImage,
+                                                    [field.id]: true
+                                                })}><Image source={{ uri: BASE_URL + "/app/public/" + field["guide_image"] }}
+                                                    style={{ width: 70, height: 70 }} /></TouchableHighlight>}
+                                            </View>
+                                            <View style={styles.floatRight}>
+                                                <TouchableOpacity
+                                                    style={innerForm[field.id] && innerForm[field.id] ? styles.buttonFile : styles.buttonEmptyFile}
+                                                    onPress={async () => {
+                                                        const setImage = (uri) => {
+                                                            updateFieldInnerForm(field.id, uri);
+                                                        };
+                                                        props.navigation.navigate("Camera", {
+                                                            operation: setImage
+                                                        });
+                                                    }}
+                                                >
+                                                    <Text style={styles.textLight}>Seleccionar imágen</Text>
+                                                </TouchableOpacity>
+                                            </View>
                                         </View>
                                         {isValidating && !isFieldValid(field) && (
                                             <Text style={[styles.textRight, styles.textError]}>Imágen requerida</Text>
