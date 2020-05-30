@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Text, TouchableOpacity, View, TextInput, AsyncStorage, Alert, CheckBox } from "react-native";
-import { TextInputMask } from "react-native-masked-text";
 import { ScrollView } from "react-native-gesture-handler";
 import { Picker } from "@react-native-community/picker";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 import Header from "../components/Header";
 import styles from "../styles";
@@ -19,6 +19,7 @@ export default function Form(props) {
     const [notif, setNotif] = useState();
     const [isValidating, setIsValidating] = useState(false);
     const [isInvalidForm, setIsInvalidForm] = useState(false);
+    const [showDate, setShowDate] = useState(false);
 
     const { formulario } = standard;
 
@@ -289,6 +290,29 @@ export default function Form(props) {
         }
     };
 
+    const showDatepicker = () => {
+        setShowDate(true);
+    };
+
+    const onChangeDate = (date, fieldId) => {
+        setShowDate(false);
+        if (date["type"] === "set") {
+            const { timestamp } = date["nativeEvent"];
+            const tmpDate = new Date(timestamp);
+            let month = '' + (tmpDate.getMonth() + 1);
+            let day = '' + tmpDate.getDate();
+            let year = tmpDate.getFullYear();
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
+
+            const finalDate = [day, month, year].join('/');
+            updateFieldInnerForm(fieldId, finalDate);
+        }
+
+    };
+
     if (loading) {
         return <Loading />;
     }
@@ -364,16 +388,17 @@ export default function Form(props) {
                                 )}
                                 {field.type === "DATE" && (
                                     <>
-                                        <TextInputMask
-                                            type={"datetime"}
-                                            options={{
-                                                format: "DD/MM/YYYY"
-                                            }}
-                                            style={isValidating && !isFieldValid(field) ? styles.inputError : styles.inputs}
-                                            placeholder="DD/MM/YYYY"
-                                            value={innerForm[field.id] && innerForm[field.id].value}
-                                            onChangeText={(text) => updateFieldInnerForm(field.id, text)}
-                                        />
+                                        <TouchableOpacity onPress={showDatepicker} style={[isValidating && !isFieldValid(field) ? styles.inputError : styles.inputs]}><Text>{innerForm[field.id] ? innerForm[field.id].value : "DD/MM/AAAA"}</Text></TouchableOpacity>
+                                        {showDate && (
+                                            <DateTimePicker
+                                                testID="dateTimePicker"
+                                                timeZoneOffsetInMinutes={0}
+                                                value={new Date()}
+                                                mode="date"
+                                                display="default"
+                                                onChange={date => onChangeDate(date, field.id)}
+                                            />
+                                        )}
                                         {isValidating && !isFieldValid(field) && <Text style={styles.textError}>Campo requerido</Text>}
                                     </>
                                 )}
