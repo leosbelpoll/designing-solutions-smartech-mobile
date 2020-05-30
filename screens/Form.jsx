@@ -12,12 +12,14 @@ import { API_URL, ACCESS_TOKEN_IDENTIFIER, USER_NAME } from "../configs";
 import Loading from "./Loading";
 
 export default function Form(props) {
+    const { standard, project, notification } = props.route.params;
     const [loading, setLoading] = useState(false);
     const [selectors, setSelectors] = useState({});
     const [innerForm, setInnerForm] = useState({});
+    const [notif, setNotif] = useState();
     const [isValidating, setIsValidating] = useState(false);
     const [isInvalidForm, setIsInvalidForm] = useState(false);
-    const { standard, project } = props.route.params;
+
     const { formulario } = standard;
 
     const updateFieldInnerForm = async (fieldId, value) => {
@@ -163,15 +165,27 @@ export default function Form(props) {
                                     if (["Unauthorized.", "Unauthenticated."].includes(res.message)) {
                                         throwAccountError();
                                     } else {
-                                        props.navigation.navigate("Projects", {
-                                            project,
-                                            standard,
-                                            username,
-                                            notification: {
-                                                type: "success",
-                                                message: `Formulario enviado correctamente`
-                                            }
-                                        });
+                                        if (formulario["keep_submitting"]["si"]) {
+                                            props.navigation.replace("Form", {
+                                                standard,
+                                                project,
+                                                notification: {
+                                                    type: "success",
+                                                    message: `Formulario enviado correctamente`
+                                                }
+                                            });
+                                        } else {
+                                            props.navigation.navigate("Projects", {
+                                                project,
+                                                standard,
+                                                username,
+                                                notification: {
+                                                    type: "success",
+                                                    message: `Formulario enviado correctamente`
+                                                }
+                                            });
+                                        }
+
                                     }
                                 })
                                 .finally(() => setLoading(false));
@@ -244,6 +258,8 @@ export default function Form(props) {
                     .done();
             }
         });
+
+        setNotif(notification);
     };
 
     useEffect(() => {
@@ -280,6 +296,10 @@ export default function Form(props) {
     return (
         <View style={styles.container}>
             <Header {...props} />
+            {(!isInvalidForm && notif) && <Text
+                style={notif.type === "success" ? styles.notificationSuccess : styles.notificationError}
+                onPress={() => setNotif(null)}
+            >{notif.message}</Text>}
             {isInvalidForm && <Text style={styles.notificationError}>Verifique los campos del formulario.</Text>}
             <ScrollView style={styles.container} contentContainerStyle={styles.contentContainerForm}>
                 <View>
@@ -444,7 +464,7 @@ export default function Form(props) {
                         ))}
                     <View style={styles.floatRight}>
                         <TouchableOpacity style={styles.buttomAction} onPress={() => saveData()}>
-                            <Text style={styles.textButton}>Guardar</Text>
+                            <Text style={styles.textButton}>{formulario["keep_submitting"]["si"] ? "Guardar y Continuar" : "Guardar"}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

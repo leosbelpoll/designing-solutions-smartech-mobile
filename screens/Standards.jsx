@@ -77,7 +77,8 @@ export default function Standards(props) {
                                 if (standard.type === "FORM") {
                                     props.navigation.navigate("Form", {
                                         standard: res,
-                                        project
+                                        project,
+                                        notification: null
                                     });
                                 } else if (standard.type === "VEHICLE") {
                                     props.navigation.navigate("Vehicle", {
