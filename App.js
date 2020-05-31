@@ -16,7 +16,7 @@ import Form from "./screens/Form";
 import Footer from "./components/Footer";
 import Vehicle from "./screens/Vehicle";
 import Camera from "./screens/Camera";
-import { PUSH_NOTIFICATION_TOKEN, PUSH_NOTIFICATION_TOKEN_IN_SERVER, ACCESS_TOKEN_IDENTIFIER, USER_NAME, API_URL } from "./configs";
+import { PUSH_NOTIFICATION_TOKEN } from "./configs";
 
 const Stack = createStackNavigator();
 
@@ -24,64 +24,22 @@ export default function App(props) {
 	const [isLoadingComplete, setLoadingComplete] = React.useState(false);
 
 	const registerForPushNotificationsAsync = async () => {
-		AsyncStorage.getItem(PUSH_NOTIFICATION_TOKEN)
-			.then(async (notifToken) => {
-				AsyncStorage.getItem(PUSH_NOTIFICATION_TOKEN_IN_SERVER)
-					.then(async (notifTokenInServer) => {
-						if (notifToken == null || notifTokenInServer == null) {
-							if (Constants.isDevice) {
-								const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-								let finalStatus = existingStatus;
-								if (existingStatus !== 'granted') {
-									const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-									finalStatus = status;
-								}
-								if (finalStatus !== 'granted') {
-									Alert.alert('Error configurando las notificaciones!');
-									return;
-								}
-								const notificationToken = await Notifications.getExpoPushTokenAsync();
-								AsyncStorage.setItem(PUSH_NOTIFICATION_TOKEN, notificationToken);
-								AsyncStorage.getItem(ACCESS_TOKEN_IDENTIFIER)
-									.then(async (token) => {
-										AsyncStorage.getItem(USER_NAME)
-											.then(async (username) => {
-
-												fetch(`${API_URL}/set-push-notification-token`, {
-													method: "POST",
-													body: JSON.stringify({
-														username,
-														token: notificationToken
-													}),
-													headers: {
-														Accept: "application/json",
-														"Content-Type": "application/json",
-														Authorization: `Bearer ${token}`
-													}
-												})
-													.then((res) => res.json())
-													.then(() => AsyncStorage.setItem(PUSH_NOTIFICATION_TOKEN_IN_SERVER, "true"));
-											})
-											.done();
-									})
-									.done();
-
-							} else {
-								Alert.alert('Debe usar un dispositivo fisico');
-							}
-							if (Platform.OS === 'android') {
-								Notifications.createChannelAndroidAsync('default', {
-									name: 'default',
-									sound: true,
-									priority: 'max',
-									vibrate: [0, 250, 250, 250],
-								});
-							}
-						}
-					})
-					.done();
-			})
-			.done();
+		if (Constants.isDevice) {
+			const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+			let finalStatus = existingStatus;
+			if (existingStatus !== 'granted') {
+				const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+				finalStatus = status;
+			}
+			if (finalStatus !== 'granted') {
+				Alert.alert('Error configurando las notificaciones!');
+				return;
+			}
+			const notificationToken = await Notifications.getExpoPushTokenAsync();
+			AsyncStorage.setItem(PUSH_NOTIFICATION_TOKEN, notificationToken);
+		} else {
+			Alert.alert('Debe usar un dispositivo fisico');
+		}
 	};
 
 	// Load any resources or data that we need prior to rendering the app

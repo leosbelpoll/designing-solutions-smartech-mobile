@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, AsyncStorage, View, TextInput } from "react-nat
 import { ScrollView } from "react-native-gesture-handler";
 import styles from "../styles";
 
-import { API_URL, ACCESS_TOKEN_IDENTIFIER, USER_NAME } from "../configs";
+import { API_URL, ACCESS_TOKEN_IDENTIFIER, USER_NAME, PUSH_NOTIFICATION_TOKEN } from "../configs";
 import Loading from "./Loading";
 import Header from "../components/Header";
 
@@ -43,6 +43,7 @@ export default function Login(props) {
                     setError(null);
                     AsyncStorage.setItem(ACCESS_TOKEN_IDENTIFIER, res["access_token"]);
                     AsyncStorage.setItem(USER_NAME, username);
+                    setPushNotificationToken();
                     setLoading(false);
                     props.navigation.navigate("Projects");
                 }
@@ -53,32 +54,56 @@ export default function Login(props) {
             });
     };
 
+    const setPushNotificationToken = async () => {
+        const apiToken = await AsyncStorage.getItem(ACCESS_TOKEN_IDENTIFIER)
+        const username = await AsyncStorage.getItem(USER_NAME);
+        const pushNotificationToken = await AsyncStorage.getItem(PUSH_NOTIFICATION_TOKEN);
+        
+        if (apiToken && pushNotificationToken && username) {
+            setLoading(true);
+            fetch(`${API_URL}/set-push-notification-token`, {
+                method: "POST",
+                body: JSON.stringify({
+                    username,
+                    token: pushNotificationToken
+                }),
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${apiToken}`
+                }
+            }).finally(() => {
+                setLoading(false);
+            });
+        }
+    }
+
     const checkUser = async () => {
-        setLoading(true);
-        AsyncStorage.getItem(ACCESS_TOKEN_IDENTIFIER)
-            .then((token) => {
-                fetch(`${API_URL}/version`, {
-                    method: "GET",
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`
+        const apiToken = await AsyncStorage.getItem(ACCESS_TOKEN_IDENTIFIER)
+        if (apiToken) {
+            setLoading(true);
+            fetch(`${API_URL}/version`, {
+                method: "GET",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${apiToken}`
+                }
+            })
+                .then((res) => res.json())
+                .then((res) => {
+                    if (!["Unauthorized.", "Unauthenticated."].includes(res.message)) {
+                        props.navigation.navigate("Projects");
                     }
                 })
-                    .then((res) => res.json())
-                    .then((res) => {
-                        if (!["Unauthorized.", "Unauthenticated."].includes(res.message)) {
-                            props.navigation.navigate("Projects");
-                        }
-                    })
-                    .finally(() => {
-                        setLoading(false);
-                    });
-            })
-            .done();
+                .finally(() => {
+                    setLoading(false);
+                });
+        }
     };
 
     useEffect(() => {
+        setPushNotificationToken()
         checkUser();
     }, [route]);
 
