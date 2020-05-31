@@ -291,12 +291,12 @@ export default function Form(props) {
         }
     };
 
-    const showDatepicker = () => {
-        setShowDate(true);
+    const showDatepicker = (fieldId) => {
+        setShowDate({ [fieldId]: true });
     };
 
     const onChangeDate = (date, fieldId) => {
-        setShowDate(false);
+        setShowDate({});
         if (date["type"] === "set") {
             const { timestamp } = date["nativeEvent"];
             const tmpDate = new Date(timestamp);
@@ -309,6 +309,7 @@ export default function Form(props) {
                 day = '0' + day;
 
             const finalDate = [day, month, year].join('/');
+
             updateFieldInnerForm(fieldId, finalDate);
         }
 
@@ -416,8 +417,8 @@ export default function Form(props) {
                                 )}
                                 {field.type === "DATE" && (
                                     <>
-                                        <TouchableOpacity onPress={showDatepicker} style={[isValidating && !isFieldValid(field) ? styles.inputError : styles.inputs]}><Text>{innerForm[field.id] ? innerForm[field.id].value : "DD/MM/AAAA"}</Text></TouchableOpacity>
-                                        {showDate && (
+                                        <TouchableOpacity onPress={() => showDatepicker(field.id)} style={[isValidating && !isFieldValid(field) ? styles.inputError : styles.inputs]}><Text>{innerForm[field.id] ? innerForm[field.id].value : "DD/MM/AAAA"}</Text></TouchableOpacity>
+                                        {showDate[field.id] && (
                                             <DateTimePicker
                                                 testID="dateTimePicker"
                                                 timeZoneOffsetInMinutes={0}
