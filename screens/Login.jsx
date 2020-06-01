@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, TouchableOpacity, AsyncStorage, View, TextInput } from "react-native";
+import { Text, TouchableOpacity, AsyncStorage, View, TextInput, Alert } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import styles from "../styles";
 
@@ -58,8 +58,10 @@ export default function Login(props) {
         const apiToken = await AsyncStorage.getItem(ACCESS_TOKEN_IDENTIFIER)
         const username = await AsyncStorage.getItem(USER_NAME);
         const pushNotificationToken = await AsyncStorage.getItem(PUSH_NOTIFICATION_TOKEN);
+        Alert.alert('Llego al inicio')
         
         if (apiToken && pushNotificationToken && username) {
+            Alert.alert('Entre')
             setLoading(true);
             fetch(`${API_URL}/set-push-notification-token`, {
                 method: "POST",
@@ -72,7 +74,7 @@ export default function Login(props) {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${apiToken}`
                 }
-            }).finally(() => {
+            }).then(() => {Alert.alert('Salio bien')}).catch(() => {Alert.alert('Dio error')}).finally(() => {
                 setLoading(false);
             });
         }
