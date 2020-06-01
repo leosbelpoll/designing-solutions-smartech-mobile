@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "387169143082",
+    "firebase_url": "https://smartech-2fc36.firebaseio.com",
+    "project_id": "smartech-2fc36",
+    "storage_bucket": "smartech-2fc36.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:387169143082:android:831678977497d18d997653",
+        "android_client_info": {
+          "package_name": "com.designingsolutions.smartech"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "387169143082-m097hl2o2p955iet7ghuehpc3qdnmkge.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZkqKynRoWEkQVJXW_vzxYjZ6lCZKyKsg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "387169143082-m097hl2o2p955iet7ghuehpc3qdnmkge.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

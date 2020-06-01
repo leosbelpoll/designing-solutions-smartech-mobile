@@ -4,7 +4,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { Picker } from "@react-native-community/picker";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 import Header from "../components/Header";
 import styles from "../styles";
@@ -187,7 +187,6 @@ export default function Form(props) {
                                                 }
                                             });
                                         }
-
                                     }
                                 })
                                 .finally(() => setLoading(false));
@@ -300,19 +299,16 @@ export default function Form(props) {
         if (date["type"] === "set") {
             const { timestamp } = date["nativeEvent"];
             const tmpDate = new Date(timestamp);
-            let month = '' + (tmpDate.getMonth() + 1);
-            let day = '' + tmpDate.getDate();
+            let month = "" + (tmpDate.getMonth() + 1);
+            let day = "" + tmpDate.getDate();
             let year = tmpDate.getFullYear();
-            if (month.length < 2)
-                month = '0' + month;
-            if (day.length < 2)
-                day = '0' + day;
+            if (month.length < 2) month = "0" + month;
+            if (day.length < 2) day = "0" + day;
 
-            const finalDate = [day, month, year].join('/');
+            const finalDate = [day, month, year].join("/");
 
             updateFieldInnerForm(fieldId, finalDate);
         }
-
     };
 
     if (loading) {
@@ -322,10 +318,11 @@ export default function Form(props) {
     return (
         <View style={styles.container}>
             <Header {...props} />
-            {(!isInvalidForm && notif) && <Text
-                style={notif.type === "success" ? styles.notificationSuccess : styles.notificationError}
-                onPress={() => setNotif(null)}
-            >{notif.message}</Text>}
+            {!isInvalidForm && notif && (
+                <Text style={notif.type === "success" ? styles.notificationSuccess : styles.notificationError} onPress={() => setNotif(null)}>
+                    {notif.message}
+                </Text>
+            )}
             {isInvalidForm && <Text style={styles.notificationError}>Verifique los campos del formulario.</Text>}
             <ScrollView style={styles.container} contentContainerStyle={styles.contentContainerForm}>
                 <View>
@@ -338,6 +335,7 @@ export default function Form(props) {
                                 {["NUMBER", "SHORT_TEXT", "LONG_TEXT"].includes(field.type) && (
                                     <>
                                         <TextInput
+                                            // editable={false}
                                             keyboardType={field.type === "NUMBER" ? "numeric" : "default"}
                                             style={[
                                                 isValidating && !isFieldValid(field) ? styles.inputError : styles.inputs,
@@ -353,6 +351,7 @@ export default function Form(props) {
                                     <>
                                         <View style={[styles.select, isValidating && !isFieldValid(field) && styles.selectError]}>
                                             <Picker
+                                                // enabled={false}
                                                 onValueChange={(itemValue) => updateFieldInnerForm(field.id, itemValue)}
                                                 selectedValue={innerForm[field.id] && innerForm[field.id].value}
                                             >
@@ -372,27 +371,49 @@ export default function Form(props) {
                                             animationType="fade"
                                             transparent={true}
                                             visible={!!showModalGuideImage[field.id]}
-                                            onRequestClose={() => setShowModalGuideImage({
-                                                ...showModalGuideImage,
-                                                [field.id]: false
-                                            })}>
+                                            onRequestClose={() =>
+                                                setShowModalGuideImage({
+                                                    ...showModalGuideImage,
+                                                    [field.id]: false
+                                                })
+                                            }
+                                        >
                                             <View style={styles.modal}>
                                                 <View>
-                                                    <TouchableHighlight onPress={() => setShowModalGuideImage({
-                                                        ...showModalGuideImage,
-                                                        [field.id]: false
-                                                    })}><Image source={{ uri: BASE_URL + "/app/public/" + field["guide_image"] }}
-                                                        style={{ width: 300, height: 300 }} /></TouchableHighlight>
+                                                    <TouchableHighlight
+                                                        // disabled={true}
+                                                        onPress={() =>
+                                                            setShowModalGuideImage({
+                                                                ...showModalGuideImage,
+                                                                [field.id]: false
+                                                            })
+                                                        }
+                                                    >
+                                                        <Image
+                                                            source={{ uri: BASE_URL + "/app/public/" + field["guide_image"] }}
+                                                            style={{ width: 300, height: 300 }}
+                                                        />
+                                                    </TouchableHighlight>
                                                 </View>
                                             </View>
                                         </Modal>
                                         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                                             <View>
-                                                {field["guide_image"] && <TouchableHighlight onPress={() => setShowModalGuideImage({
-                                                    ...showModalGuideImage,
-                                                    [field.id]: true
-                                                })}><Image source={{ uri: BASE_URL + "/app/public/" + field["guide_image"] }}
-                                                    style={{ width: 70, height: 70 }} /></TouchableHighlight>}
+                                                {field["guide_image"] && (
+                                                    <TouchableHighlight
+                                                        onPress={() =>
+                                                            setShowModalGuideImage({
+                                                                ...showModalGuideImage,
+                                                                [field.id]: true
+                                                            })
+                                                        }
+                                                    >
+                                                        <Image
+                                                            source={{ uri: BASE_URL + "/app/public/" + field["guide_image"] }}
+                                                            style={{ width: 70, height: 70 }}
+                                                        />
+                                                    </TouchableHighlight>
+                                                )}
                                             </View>
                                             <View style={styles.floatRight}>
                                                 <TouchableOpacity
@@ -417,7 +438,12 @@ export default function Form(props) {
                                 )}
                                 {field.type === "DATE" && (
                                     <>
-                                        <TouchableOpacity onPress={() => showDatepicker(field.id)} style={[isValidating && !isFieldValid(field) ? styles.inputError : styles.inputs]}><Text>{innerForm[field.id] ? innerForm[field.id].value : "DD/MM/AAAA"}</Text></TouchableOpacity>
+                                        <TouchableOpacity
+                                            onPress={() => showDatepicker(field.id)}
+                                            style={[isValidating && !isFieldValid(field) ? styles.inputError : styles.inputs]}
+                                        >
+                                            <Text>{innerForm[field.id] ? innerForm[field.id].value : "DD/MM/AAAA"}</Text>
+                                        </TouchableOpacity>
                                         {showDate[field.id] && (
                                             <DateTimePicker
                                                 testID="dateTimePicker"
@@ -425,7 +451,7 @@ export default function Form(props) {
                                                 value={new Date()}
                                                 mode="date"
                                                 display="default"
-                                                onChange={date => onChangeDate(date, field.id)}
+                                                onChange={(date) => onChangeDate(date, field.id)}
                                             />
                                         )}
                                         {isValidating && !isFieldValid(field) && <Text style={styles.textError}>Campo requerido</Text>}

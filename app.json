@@ -29,7 +29,8 @@
     "android": {
       "package": "com.designingsolutions.smartech",
       "versionCode": 1,
-      "permissions": ["CAMERA", "CAMERA_ROLL", "NOTIFICATIONS"]
+      "permissions": ["CAMERA", "CAMERA_ROLL", "NOTIFICATIONS"],
+      "googleServicesFile": "./google-services.json"
     },
     "ios": {
       "bundleIdentifier": "com.designingsolutions.smartech"

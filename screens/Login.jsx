@@ -55,14 +55,11 @@ export default function Login(props) {
     };
 
     const setPushNotificationToken = async () => {
-        const apiToken = await AsyncStorage.getItem(ACCESS_TOKEN_IDENTIFIER)
+        const apiToken = await AsyncStorage.getItem(ACCESS_TOKEN_IDENTIFIER);
         const username = await AsyncStorage.getItem(USER_NAME);
         const pushNotificationToken = await AsyncStorage.getItem(PUSH_NOTIFICATION_TOKEN);
-        Alert.alert('Data', pushNotificationToken + "-------" + username + "---------" + apiToken);
 
-        
         if (apiToken && pushNotificationToken && username) {
-            Alert.alert('Entre')
             setLoading(true);
             fetch(`${API_URL}/set-push-notification-token`, {
                 method: "POST",
@@ -75,14 +72,14 @@ export default function Login(props) {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${apiToken}`
                 }
-            }).then(() => {Alert.alert('Salio bien')}).catch(() => {Alert.alert('Dio error')}).finally(() => {
+            }).finally(() => {
                 setLoading(false);
             });
         }
-    }
+    };
 
     const checkUser = async () => {
-        const apiToken = await AsyncStorage.getItem(ACCESS_TOKEN_IDENTIFIER)
+        const apiToken = await AsyncStorage.getItem(ACCESS_TOKEN_IDENTIFIER);
         if (apiToken) {
             setLoading(true);
             fetch(`${API_URL}/version`, {
@@ -106,7 +103,7 @@ export default function Login(props) {
     };
 
     useEffect(() => {
-        setPushNotificationToken()
+        setPushNotificationToken();
         checkUser();
     }, [route]);
 
