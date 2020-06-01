@@ -318,6 +318,7 @@ export default function Form(props) {
     return (
         <View style={styles.container}>
             <Header {...props} />
+            {console.log(formulario.fields)}
             {!isInvalidForm && notif && (
                 <Text style={notif.type === "success" ? styles.notificationSuccess : styles.notificationError} onPress={() => setNotif(null)}>
                     {notif.message}
@@ -381,7 +382,6 @@ export default function Form(props) {
                                             <View style={styles.modal}>
                                                 <View>
                                                     <TouchableHighlight
-                                                        // disabled={true}
                                                         onPress={() =>
                                                             setShowModalGuideImage({
                                                                 ...showModalGuideImage,
@@ -401,6 +401,7 @@ export default function Form(props) {
                                             <View>
                                                 {field["guide_image"] && (
                                                     <TouchableHighlight
+                                                        // disabled={true}
                                                         onPress={() =>
                                                             setShowModalGuideImage({
                                                                 ...showModalGuideImage,
@@ -417,6 +418,7 @@ export default function Form(props) {
                                             </View>
                                             <View style={styles.floatRight}>
                                                 <TouchableOpacity
+                                                    // disabled={true}
                                                     style={innerForm[field.id] && innerForm[field.id] ? styles.buttonFile : styles.buttonEmptyFile}
                                                     onPress={async () => {
                                                         const setImage = (uri) => {
@@ -439,6 +441,7 @@ export default function Form(props) {
                                 {field.type === "DATE" && (
                                     <>
                                         <TouchableOpacity
+                                            // disabled={true}
                                             onPress={() => showDatepicker(field.id)}
                                             style={[isValidating && !isFieldValid(field) ? styles.inputError : styles.inputs]}
                                         >
@@ -461,6 +464,7 @@ export default function Form(props) {
                                     <>
                                         <View style={[styles.select, isValidating && !isFieldValid(field) && styles.selectError]}>
                                             <Picker
+                                                // enabled={false}
                                                 onValueChange={(itemValue) => updateFieldInnerForm(field.id, itemValue)}
                                                 selectedValue={innerForm[field.id] && innerForm[field.id].value}
                                             >
@@ -479,6 +483,7 @@ export default function Form(props) {
                                                 <View style={{ flexDirection: "column" }} key={item}>
                                                     <View style={{ flexDirection: "row" }}>
                                                         <CheckBox
+                                                            // disabled={true}
                                                             onValueChange={() => toggleCheckOption(field.id, item)}
                                                             value={isCheckedOption(field.id, item)}
                                                         />
@@ -495,6 +500,7 @@ export default function Form(props) {
                                         <View style={{ flexDirection: "column" }}>
                                             <View style={{ flexDirection: "row" }}>
                                                 <CheckBox
+                                                    // disabled={true}
                                                     value={innerForm[field.id] && innerForm[field.id].value === "Si"}
                                                     onValueChange={() => updateFieldInnerForm(field.id, "Si")}
                                                 />
@@ -504,6 +510,7 @@ export default function Form(props) {
                                         <View style={{ flexDirection: "column" }}>
                                             <View style={{ flexDirection: "row" }}>
                                                 <CheckBox
+                                                    // disabled={true}
                                                     value={innerForm[field.id] && innerForm[field.id].value === "No"}
                                                     onValueChange={() => updateFieldInnerForm(field.id, "No")}
                                                 />
@@ -513,6 +520,7 @@ export default function Form(props) {
                                         <View style={{ flexDirection: "column" }}>
                                             <View style={{ flexDirection: "row" }}>
                                                 <CheckBox
+                                                    // disabled={true}
                                                     value={
                                                         innerForm[field.id] &&
                                                         innerForm[field.id].value &&
@@ -522,6 +530,7 @@ export default function Form(props) {
                                                 />
                                                 <Text style={{ marginTop: 5 }}> Otro</Text>
                                                 <TextInput
+                                                    // editable={false}
                                                     style={{
                                                         borderBottomColor: "rgba(0, 0, 0, 0.2)",
                                                         borderBottomWidth: 1,
