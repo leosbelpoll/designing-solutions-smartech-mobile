@@ -28,18 +28,27 @@ export default function App(props) {
 			const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
 			let finalStatus = existingStatus;
 			if (existingStatus !== 'granted') {
-				const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-				finalStatus = status;
+			  const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+			  finalStatus = status;
 			}
 			if (finalStatus !== 'granted') {
 				Alert.alert('Error configurando las notificaciones!');
-				return;
+			  return;
 			}
-			const notificationToken = await Notifications.getExpoPushTokenAsync();
-			AsyncStorage.setItem(PUSH_NOTIFICATION_TOKEN, notificationToken);
-		} else {
+			token = await Notifications.getExpoPushTokenAsync();
+			AsyncStorage.setItem(PUSH_NOTIFICATION_TOKEN, token);
+		  } else {
 			Alert.alert('Debe usar un dispositivo fisico');
-		}
+		  }
+	  
+		  if (Platform.OS === 'android') {
+			Notifications.createChannelAndroidAsync('default', {
+			  name: 'default',
+			  sound: true,
+			  priority: 'max',
+			  vibrate: [0, 250, 250, 250],
+			});
+		  }
 	};
 
 	// Load any resources or data that we need prior to rendering the app

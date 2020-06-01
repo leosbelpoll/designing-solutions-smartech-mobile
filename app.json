@@ -29,7 +29,7 @@
     "android": {
       "package": "com.designingsolutions.smartech",
       "versionCode": 1,
-      "permissions": ["CAMERA", "CAMERA_ROLL"]
+      "permissions": ["CAMERA", "CAMERA_ROLL", "NOTIFICATIONS"]
     },
     "ios": {
       "bundleIdentifier": "com.designingsolutions.smartech"
