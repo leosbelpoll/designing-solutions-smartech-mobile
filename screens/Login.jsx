@@ -58,7 +58,7 @@ export default function Login(props) {
         const apiToken = await AsyncStorage.getItem(ACCESS_TOKEN_IDENTIFIER)
         const username = await AsyncStorage.getItem(USER_NAME);
         const pushNotificationToken = await AsyncStorage.getItem(PUSH_NOTIFICATION_TOKEN);
-        Alert.alert(apiToken + "-------" + username + "---------" + pushNotificationToken);
+        Alert.alert('Data', pushNotificationToken + "-------" + username + "---------" + apiToken);
 
         
         if (apiToken && pushNotificationToken && username) {
