@@ -318,7 +318,6 @@ export default function Form(props) {
     return (
         <View style={styles.container}>
             <Header {...props} />
-            {console.log(formulario.fields)}
             {!isInvalidForm && notif && (
                 <Text style={notif.type === "success" ? styles.notificationSuccess : styles.notificationError} onPress={() => setNotif(null)}>
                     {notif.message}
@@ -330,9 +329,9 @@ export default function Form(props) {
                     {formulario.fields
                         .sort((a, b) => (a.position > b.position ? 1 : b.position > a.position ? -1 : 0))
                         .map((field) => (
-                            <>
+                            <React.Fragment key={field.id}>
                                 {(!field.field_id || (innerForm[field.field_id] && innerForm[field.field_id].value == field.field_value)) && (
-                                    <React.Fragment key={field.id}>
+                                    <>
                                         {field.label && <Text style={styles.label}>{field.label}</Text>}
                                         {!field.label && <View style={{ marginBottom: 20 }}></View>}
                                         {["NUMBER", "SHORT_TEXT", "LONG_TEXT"].includes(field.type) && (
@@ -557,9 +556,9 @@ export default function Form(props) {
                                                 {isValidating && !isFieldValid(field) && <Text style={styles.textError}>Campo requerido</Text>}
                                             </>
                                         )}
-                                    </React.Fragment>
+                                    </>
                                 )}
-                            </>
+                            </React.Fragment>
                         ))}
                     <View style={styles.floatRight}>
                         <TouchableOpacity style={styles.buttomAction} onPress={() => saveData()}>
