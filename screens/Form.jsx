@@ -28,9 +28,16 @@ export default function Form(props) {
         if (value != null) {
             const dependentFields = formulario.fields.filter((f) => f.field_id === fieldId);
             console.log(dependentFields);
-            
+
             dependentFields.forEach((f) => {
-                if (f.field_value !== value) {
+                if (
+                    !value
+                        .split("|")
+                        .map((val) => val.toLowerCase().trim())
+                        .includes(f.field_value.toLowerCase().trim())
+                ) {
+                    console.log("entro");
+                    
                     setInnerForm({
                         ...innerForm,
                         [f.id]: {
