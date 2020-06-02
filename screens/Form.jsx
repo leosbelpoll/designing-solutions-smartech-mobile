@@ -37,15 +37,35 @@ export default function Form(props) {
 
     const isValidDependentField = (fieldId) => {
         const field = formulario.fields.find((f) => f.id === fieldId);
-        return (
+        const isValid =
             field &&
             (!field.field_id ||
                 (innerForm[field.field_id] &&
                     innerForm[field.field_id].value
                         .split("|")
                         .map((val) => val.toLowerCase().trim())
-                        .includes(field.field_value.toLowerCase().trim())))
-        );
+                        .includes(field.field_value.toLowerCase().trim())));
+
+        if (isValid) {
+            if (innerForm[fieldId]) {
+                setInnerForm({
+                    ...innerForm,
+                    [fieldId]: {
+                        value: innerForm[fieldId].value
+                    }
+                });
+            }
+        } else {
+            if (innerForm[fieldId]) {
+                setInnerForm({
+                    ...innerForm,
+                    [fieldId]: {
+                        state: "DISABLED",
+                        value: innerForm[fieldId].value
+                    }
+                });
+            }
+        }
     };
 
     const isFieldValid = (field) => {
@@ -152,7 +172,7 @@ export default function Form(props) {
                             const arrayInnerForm = [];
                             for (const fieldId in innerForm) {
                                 if (innerForm.hasOwnProperty(fieldId)) {
-                                    if ((!formulario.fields[fieldId].field_id || isValidDependentField(fieldId)) && innerForm[fieldId].value) {
+                                    if (innerForm[fieldId].value && innerForm[fieldId].state !== "DISABLED") {
                                         arrayInnerForm.push({
                                             id: fieldId,
                                             value: innerForm[fieldId].value
