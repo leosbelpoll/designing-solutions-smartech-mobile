@@ -36,12 +36,13 @@ export default function Form(props) {
     const isValidDependentField = (fieldId) => {
         const field = formulario.fields.find((f) => f.id === fieldId);
         return (
-            !field.field_id ||
-            (innerForm[field.field_id] &&
-                innerForm[field.field_id].value
-                    .split("|")
-                    .map((val) => val.toLowerCase().trim())
-                    .includes(field.field_value.toLowerCase().trim()))
+            field &&
+            (!field.field_id ||
+                (innerForm[field.field_id] &&
+                    innerForm[field.field_id].value
+                        .split("|")
+                        .map((val) => val.toLowerCase().trim())
+                        .includes(field.field_value.toLowerCase().trim())))
         );
     };
 
