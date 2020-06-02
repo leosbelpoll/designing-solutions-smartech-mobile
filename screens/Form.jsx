@@ -33,6 +33,18 @@ export default function Form(props) {
         });
     };
 
+    const isValidDependentField = (fieldId) => {
+        const field = formulario.fields.find((f) => f.id === fieldId);
+        return (
+            !field.field_id ||
+            (innerForm[field.field_id] &&
+                innerForm[field.field_id].value
+                    .split("|")
+                    .map((val) => val.toLowerCase().trim())
+                    .includes(field.field_value.toLowerCase().trim()))
+        );
+    };
+
     const isFieldValid = (field) => {
         let isFieldValid = true;
 
@@ -135,13 +147,13 @@ export default function Form(props) {
                             formData.append("username", username);
                             formData.append("formulario_id", formulario.id);
                             const arrayInnerForm = [];
-                            for (const key in innerForm) {
-                                if (innerForm.hasOwnProperty(key)) {
-                                    const element = innerForm[key];
-                                    if (innerForm[key].value) {
+                            for (const fieldId in innerForm) {
+                                if (innerForm.hasOwnProperty(fieldId)) {
+                                    const element = innerForm[fieldId];
+                                    if (isValidDependentField(fieldId) && innerForm[fieldId].value) {
                                         arrayInnerForm.push({
-                                            id: key,
-                                            value: innerForm[key].value
+                                            id: fieldId,
+                                            value: innerForm[fieldId].value
                                         });
                                     }
                                 }
@@ -330,12 +342,7 @@ export default function Form(props) {
                         .sort((a, b) => (a.position > b.position ? 1 : b.position > a.position ? -1 : 0))
                         .map((field) => (
                             <React.Fragment key={field.id}>
-                                {(!field.field_id ||
-                                    (innerForm[field.field_id] &&
-                                        innerForm[field.field_id].value
-                                            .split("|")
-                                            .map((val) => val.toLowerCase().trim())
-                                            .includes(field.field_value.toLowerCase().trim()))) && (
+                                {isValidDependentField(field.id) && (
                                     <>
                                         {field.label && <Text style={styles.label}>{field.label}</Text>}
                                         {!field.label && <View style={{ marginBottom: 20 }}></View>}
