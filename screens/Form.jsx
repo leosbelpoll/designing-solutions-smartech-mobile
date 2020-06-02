@@ -25,12 +25,14 @@ export default function Form(props) {
     const { formulario } = standard;
 
     const updateFieldInnerForm = async (fieldId, value) => {
-        setInnerForm({
-            ...innerForm,
-            [fieldId]: {
-                value
-            }
-        });
+        if (fieldId) {
+            setInnerForm({
+                ...innerForm,
+                [fieldId]: {
+                    value
+                }
+            });
+        }
     };
 
     const isValidDependentField = (fieldId) => {
@@ -150,7 +152,6 @@ export default function Form(props) {
                             const arrayInnerForm = [];
                             for (const fieldId in innerForm) {
                                 if (innerForm.hasOwnProperty(fieldId)) {
-                                    const element = innerForm[fieldId];
                                     if (isValidDependentField(fieldId) && innerForm[fieldId].value) {
                                         arrayInnerForm.push({
                                             id: fieldId,
