@@ -27,6 +27,8 @@ export default function Form(props) {
     const updateFieldInnerForm = async (fieldId, value) => {
         if (value != null) {
             const dependentFields = formulario.fields.filter((f) => f.field_id === fieldId);
+            console.log(dependentFields);
+            
             dependentFields.forEach((f) => {
                 if (f.field_value !== value) {
                     setInnerForm({
