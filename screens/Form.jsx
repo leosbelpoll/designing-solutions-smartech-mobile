@@ -45,6 +45,9 @@ export default function Form(props) {
                     });
                 }
             });
+
+            console.log(innerForm);
+            
             setInnerForm({
                 ...innerForm,
                 [fieldId]: {
