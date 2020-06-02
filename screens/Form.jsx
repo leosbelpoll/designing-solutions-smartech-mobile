@@ -66,6 +66,8 @@ export default function Form(props) {
                 });
             }
         }
+
+        return isValid;
     };
 
     const isFieldValid = (field) => {
