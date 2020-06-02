@@ -26,7 +26,6 @@ export default function Form(props) {
 
     const updateFieldInnerForm = async (fieldId, value) => {
         if (value != null) {
-            
             setInnerForm({
                 ...innerForm,
                 [fieldId]: {
@@ -35,8 +34,6 @@ export default function Form(props) {
                     value
                 }
             });
-
-            console.log(innerForm);
         }
     };
 
@@ -81,29 +78,17 @@ export default function Form(props) {
 
     const toggleCheckOption = (fieldId, value) => {
         if (isCheckedOption(fieldId, value)) {
-            setInnerForm({
-                ...innerForm,
-                [fieldId]: {
-                    value: innerForm[fieldId].value
-                        .split("|")
-                        .filter((option) => option !== value)
-                        .join("|")
-                }
-            });
+            updateFieldInnerForm(
+                fieldId,
+                innerForm[fieldId].value
+                    .split("|")
+                    .filter((option) => option !== value)
+                    .join("|")
+            );
         } else if (!innerForm[fieldId]) {
-            setInnerForm({
-                ...innerForm,
-                [fieldId]: {
-                    value: value
-                }
-            });
+            updateFieldInnerForm(fieldId, value);
         } else {
-            setInnerForm({
-                ...innerForm,
-                [fieldId]: {
-                    value: innerForm[fieldId] && innerForm[fieldId].value + "|" + value
-                }
-            });
+            updateFieldInnerForm(fieldId, innerForm[fieldId] && innerForm[fieldId].value + "|" + value);
         }
     };
 
@@ -144,7 +129,7 @@ export default function Form(props) {
             setIsInvalidForm(true);
         } else {
             setIsInvalidForm(false);
-            setLoading(true);
+            // setLoading(true);
             AsyncStorage.getItem(USER_NAME)
                 .then((username) => {
                     AsyncStorage.getItem(ACCESS_TOKEN_IDENTIFIER)
@@ -157,9 +142,9 @@ export default function Form(props) {
                             const arrayInnerForm = [];
                             for (const fieldId in innerForm) {
                                 if (innerForm.hasOwnProperty(fieldId)) {
-                                    if (innerForm[fieldId].value) {
+                                    if (innerForm[fieldId].value && (!innerForm[fieldId].dependency_id) || isValidDependentField(fieldId)) {
                                         console.log(innerForm[fieldId]);
-                                        
+
                                         arrayInnerForm.push({
                                             id: fieldId,
                                             value: innerForm[fieldId].value
@@ -174,43 +159,43 @@ export default function Form(props) {
                             });
                             formData.append("fields", JSON.stringify(arrayInnerForm));
 
-                            fetch(`${API_URL}/save-values`, {
-                                method: "POST",
-                                body: formData,
-                                headers: {
-                                    Accept: "application/json",
-                                    "Content-Type": "multipart/form-data",
-                                    Authorization: `Bearer ${token}`
-                                }
-                            })
-                                .then((res) => res.json())
-                                .then((res) => {
-                                    if (["Unauthorized.", "Unauthenticated."].includes(res.message)) {
-                                        throwAccountError();
-                                    } else {
-                                        if (formulario["keep_submitting"]["si"]) {
-                                            props.navigation.replace("Form", {
-                                                standard,
-                                                project,
-                                                notification: {
-                                                    type: "success",
-                                                    message: `Formulario enviado correctamente`
-                                                }
-                                            });
-                                        } else {
-                                            props.navigation.navigate("Projects", {
-                                                project,
-                                                standard,
-                                                username,
-                                                notification: {
-                                                    type: "success",
-                                                    message: `Formulario enviado correctamente`
-                                                }
-                                            });
-                                        }
-                                    }
-                                })
-                                .finally(() => setLoading(false));
+                            // fetch(`${API_URL}/save-values`, {
+                            //     method: "POST",
+                            //     body: formData,
+                            //     headers: {
+                            //         Accept: "application/json",
+                            //         "Content-Type": "multipart/form-data",
+                            //         Authorization: `Bearer ${token}`
+                            //     }
+                            // })
+                            //     .then((res) => res.json())
+                            //     .then((res) => {
+                            //         if (["Unauthorized.", "Unauthenticated."].includes(res.message)) {
+                            //             throwAccountError();
+                            //         } else {
+                            //             if (formulario["keep_submitting"]["si"]) {
+                            //                 props.navigation.replace("Form", {
+                            //                     standard,
+                            //                     project,
+                            //                     notification: {
+                            //                         type: "success",
+                            //                         message: `Formulario enviado correctamente`
+                            //                     }
+                            //                 });
+                            //             } else {
+                            //                 props.navigation.navigate("Projects", {
+                            //                     project,
+                            //                     standard,
+                            //                     username,
+                            //                     notification: {
+                            //                         type: "success",
+                            //                         message: `Formulario enviado correctamente`
+                            //                     }
+                            //                 });
+                            //             }
+                            //         }
+                            //     })
+                            //     .finally(() => setLoading(false));
                         })
                         .done();
                 })
