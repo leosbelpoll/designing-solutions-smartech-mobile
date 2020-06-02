@@ -37,17 +37,16 @@ export default function Form(props) {
         }
     };
 
+    const containsValue = (value1, value2) => {
+        return value1
+            .split("|")
+            .map((val) => val.toLowerCase().trim())
+            .includes(value2.toLowerCase().trim());
+    };
+
     const isValidDependentField = (fieldId) => {
         const field = formulario.fields.find((f) => f.id === fieldId);
-        return (
-            field &&
-            (!field.field_id ||
-                (innerForm[field.field_id] &&
-                    innerForm[field.field_id].value
-                        .split("|")
-                        .map((val) => val.toLowerCase().trim())
-                        .includes(field.field_value.toLowerCase().trim())))
-        );
+        return field && (!field.field_id || (innerForm[field.field_id] && containsValue(innerForm[field.field_id].value, field.field_value)));
     };
 
     const isFieldValid = (field) => {
@@ -142,7 +141,11 @@ export default function Form(props) {
                             const arrayInnerForm = [];
                             for (const fieldId in innerForm) {
                                 if (innerForm.hasOwnProperty(fieldId)) {
-                                    if (innerForm[fieldId].value) {
+                                    if (
+                                        innerForm[fieldId].value &&
+                                        (!innerForm[fieldId].dependency_id ||
+                                            containsValue(innerForm[innerForm[fieldId].dependency_id].value, innerForm[fieldId].dependency_value))
+                                    ) {
                                         console.log(innerForm[fieldId]);
 
                                         arrayInnerForm.push({
