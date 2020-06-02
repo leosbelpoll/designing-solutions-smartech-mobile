@@ -27,7 +27,7 @@ export default function Form(props) {
     const updateFieldInnerForm = async (fieldId, value) => {
         if (value != null) {
             
-            setInnerForm({
+            await setInnerForm({
                 ...innerForm,
                 [fieldId]: {
                     value
