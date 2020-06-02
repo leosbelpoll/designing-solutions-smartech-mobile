@@ -154,11 +154,7 @@ export default function Form(props) {
                             const arrayInnerForm = [];
                             for (const fieldId in innerForm) {
                                 if (innerForm.hasOwnProperty(fieldId)) {
-                                    if (
-                                        innerForm[fieldId].value &&
-                                        (!innerForm[fieldId].dependency_id ||
-                                            innerForm[innerForm[fieldId].dependency_id].value === innerForm[fieldId].dependency_value)
-                                    ) {
+                                    if (innerForm[fieldId].value && (!innerForm[fieldId].dependency_id || isValidDependentField(fieldId))) {
                                         arrayInnerForm.push({
                                             id: fieldId,
                                             value: innerForm[fieldId].value
