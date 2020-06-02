@@ -29,6 +29,8 @@ export default function Form(props) {
             setInnerForm({
                 ...innerForm,
                 [fieldId]: {
+                    dependency_id: formulario.fields[fieldId].field_id,
+                    dependency_value: formulario.fields[fieldId].field_value,
                     value
                 }
             });
@@ -37,37 +39,15 @@ export default function Form(props) {
 
     const isValidDependentField = (fieldId) => {
         const field = formulario.fields.find((f) => f.id === fieldId);
-        const isValid =
+        return (
             field &&
             (!field.field_id ||
                 (innerForm[field.field_id] &&
                     innerForm[field.field_id].value
                         .split("|")
                         .map((val) => val.toLowerCase().trim())
-                        .includes(field.field_value.toLowerCase().trim())));
-
-        if (isValid) {
-            if (innerForm[fieldId]) {
-                setInnerForm({
-                    ...innerForm,
-                    [fieldId]: {
-                        value: innerForm[fieldId].value
-                    }
-                });
-            }
-        } else {
-            if (innerForm[fieldId]) {
-                setInnerForm({
-                    ...innerForm,
-                    [fieldId]: {
-                        state: "DISABLED",
-                        value: innerForm[fieldId].value
-                    }
-                });
-            }
-        }
-
-        return isValid;
+                        .includes(field.field_value.toLowerCase().trim())))
+        );
     };
 
     const isFieldValid = (field) => {
@@ -174,7 +154,11 @@ export default function Form(props) {
                             const arrayInnerForm = [];
                             for (const fieldId in innerForm) {
                                 if (innerForm.hasOwnProperty(fieldId)) {
-                                    if (innerForm[fieldId].value && innerForm[fieldId].state !== "DISABLED") {
+                                    if (
+                                        innerForm[fieldId].value &&
+                                        (!innerForm[fieldId].dependency_id ||
+                                            innerForm[innerForm[fieldId].dependency_id].value === innerForm[fieldId].dependency_value)
+                                    ) {
                                         arrayInnerForm.push({
                                             id: fieldId,
                                             value: innerForm[fieldId].value
