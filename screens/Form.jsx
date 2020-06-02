@@ -28,6 +28,13 @@ export default function Form(props) {
         if (value != null) {
             const dependentFields = formulario.fields.filter((f) => f.field_id === fieldId);
 
+            setInnerForm({
+                ...innerForm,
+                [fieldId]: {
+                    value
+                }
+            });
+
             for (let i = 0; i < dependentFields.length; i++) {
                 console.log("entro a ciclo");
 
@@ -47,13 +54,6 @@ export default function Form(props) {
             }
 
             console.log(innerForm);
-
-            setInnerForm({
-                ...innerForm,
-                [fieldId]: {
-                    value
-                }
-            });
         }
     };
 
