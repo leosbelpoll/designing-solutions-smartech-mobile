@@ -26,11 +26,20 @@ export default function Form(props) {
 
     const updateFieldInnerForm = async (fieldId, value) => {
         if (value != null) {
+            const dependentFields = formulario.fields.find((f) => f.field_id === fieldId);
+            dependentFields.forEach((f) => {
+                if (f.field_value !== value) {
+                    setInnerForm({
+                        ...innerForm,
+                        [f.id]: {
+                            value: null
+                        }
+                    });
+                }
+            });
             setInnerForm({
                 ...innerForm,
                 [fieldId]: {
-                    dependency_id: formulario.fields.find((f) => f.id === fieldId).field_id,
-                    dependency_value: formulario.fields.find((f) => f.id === fieldId).field_value,
                     value
                 }
             });
@@ -154,7 +163,7 @@ export default function Form(props) {
                             const arrayInnerForm = [];
                             for (const fieldId in innerForm) {
                                 if (innerForm.hasOwnProperty(fieldId)) {
-                                    if (innerForm[fieldId].value && (!innerForm[fieldId].dependency_id || isValidDependentField(fieldId))) {
+                                    if (innerForm[fieldId].value) {
                                         arrayInnerForm.push({
                                             id: fieldId,
                                             value: innerForm[fieldId].value
