@@ -152,7 +152,7 @@ export default function Form(props) {
                             const arrayInnerForm = [];
                             for (const fieldId in innerForm) {
                                 if (innerForm.hasOwnProperty(fieldId)) {
-                                    if ((!formulario.fields(fieldId).field_id || isValidDependentField(field.id)) && innerForm[fieldId].value) {
+                                    if ((!formulario.fields[fieldId].field_id || isValidDependentField(field.id)) && innerForm[fieldId].value) {
                                         arrayInnerForm.push({
                                             id: fieldId,
                                             value: innerForm[fieldId].value
