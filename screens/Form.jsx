@@ -330,7 +330,12 @@ export default function Form(props) {
                         .sort((a, b) => (a.position > b.position ? 1 : b.position > a.position ? -1 : 0))
                         .map((field) => (
                             <React.Fragment key={field.id}>
-                                {(!field.field_id || (innerForm[field.field_id] && innerForm[field.field_id].value == field.field_value)) && (
+                                {(!field.field_id ||
+                                    (innerForm[field.field_id] &&
+                                        innerForm[field.field_id].value
+                                            .split("|")
+                                            .map((val) => val.toLowerCase().trim())
+                                            .includes(field.field_value.toLowerCase().trim()))) && (
                                     <>
                                         {field.label && <Text style={styles.label}>{field.label}</Text>}
                                         {!field.label && <View style={{ marginBottom: 20 }}></View>}
