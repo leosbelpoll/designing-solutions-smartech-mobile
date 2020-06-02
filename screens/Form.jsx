@@ -30,7 +30,6 @@ export default function Form(props) {
                 ...innerForm,
                 [fieldId]: {
                     dependency_id: formulario.fields.find((f) => f.id === fieldId).field_id,
-                    dependency_value: formulario.fields.find((f) => f.id === fieldId).field_value,
                     value
                 }
             });
@@ -157,7 +156,7 @@ export default function Form(props) {
                                     if (
                                         innerForm[fieldId].value &&
                                         (!innerForm[fieldId].dependency_id ||
-                                            innerForm[innerForm[fieldId].dependency_id].value === innerForm[fieldId].dependency_value)
+                                            innerForm[innerForm[fieldId].dependency_id].value === innerForm[fieldId].value)
                                     ) {
                                         arrayInnerForm.push({
                                             id: fieldId,
