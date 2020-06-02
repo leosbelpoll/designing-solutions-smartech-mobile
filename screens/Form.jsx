@@ -37,13 +37,11 @@ export default function Form(props) {
                         .map((val) => val.toLowerCase().trim())
                         .includes(f.field_value.toLowerCase().trim())
                 ) {
-                    console.log("entro");
+                    console.log("entro", f.id);
                     
                     setInnerForm({
                         ...innerForm,
-                        [f.id]: {
-                            value: null
-                        }
+                        [f.id]: null
                     });
                 }
             });
