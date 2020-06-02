@@ -29,8 +29,8 @@ export default function Form(props) {
             setInnerForm({
                 ...innerForm,
                 [fieldId]: {
-                    dependency_id: formulario.fields[fieldId].field_id,
-                    dependency_value: formulario.fields[fieldId].field_value,
+                    dependency_id: formulario.fields.find((f) => f.id === fieldId).field_id,
+                    dependency_value: formulario.fields.find((f) => f.id === fieldId).field_value,
                     value
                 }
             });
