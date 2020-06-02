@@ -142,7 +142,7 @@ export default function Form(props) {
                             const arrayInnerForm = [];
                             for (const fieldId in innerForm) {
                                 if (innerForm.hasOwnProperty(fieldId)) {
-                                    if (innerForm[fieldId].value && (!innerForm[fieldId].dependency_id || isValidDependentField(fieldId))) {
+                                    if (innerForm[fieldId].value) {
                                         console.log(innerForm[fieldId]);
 
                                         arrayInnerForm.push({
