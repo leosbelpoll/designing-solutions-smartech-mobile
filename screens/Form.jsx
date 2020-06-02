@@ -28,26 +28,26 @@ export default function Form(props) {
         if (value != null) {
             const dependentFields = formulario.fields.filter((f) => f.field_id === fieldId);
 
-            dependentFields.forEach((f) => {
+            for (let i = 0; i < dependentFields.length; i++) {
                 console.log("entro a ciclo");
-                
+
                 if (
                     !value
                         .split("|")
                         .map((val) => val.toLowerCase().trim())
-                        .includes(f.field_value.toLowerCase().trim())
+                        .includes(dependentFields[i].field_value.toLowerCase().trim())
                 ) {
-                    console.log("entro", f.id);
-                    
+                    console.log("entro", dependentFields[i].id);
+
                     setInnerForm({
                         ...innerForm,
-                        [f.id]: null
+                        [dependentFields[i].id]: null
                     });
                 }
-            });
+            }
 
             console.log(innerForm);
-            
+
             setInnerForm({
                 ...innerForm,
                 [fieldId]: {
