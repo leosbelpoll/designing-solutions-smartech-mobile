@@ -25,7 +25,7 @@ export default function Form(props) {
     const { formulario } = standard;
 
     const updateFieldInnerForm = async (fieldId, value) => {
-        if (fieldId) {
+        if (value) {
             setInnerForm({
                 ...innerForm,
                 [fieldId]: {
@@ -37,7 +37,6 @@ export default function Form(props) {
 
     const isValidDependentField = (fieldId) => {
         const field = formulario.fields.find((f) => f.id === fieldId);
-        console.log("este es field", fieldId, field);
         return (
             field &&
             (!field.field_id ||
