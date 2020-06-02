@@ -37,6 +37,7 @@ export default function Form(props) {
 
     const isValidDependentField = (fieldId) => {
         const field = formulario.fields.find((f) => f.id === fieldId);
+        console.log('este es field', fieldId, field)
         return (
             field &&
             (!field.field_id ||
