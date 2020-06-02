@@ -33,28 +33,6 @@ export default function Form(props) {
                     value
                 }
             });
-            
-            const dependentFields = formulario.fields.filter((f) => f.field_id === fieldId);
-
-            for (let i = 0; i < dependentFields.length; i++) {
-                console.log("entro a ciclo");
-
-                if (
-                    !value
-                        .split("|")
-                        .map((val) => val.toLowerCase().trim())
-                        .includes(dependentFields[i].field_value.toLowerCase().trim())
-                ) {
-                    console.log("entro", dependentFields[i].id);
-
-                    setInnerForm({
-                        ...innerForm,
-                        [dependentFields[i].id]: {
-                            value: null
-                        }
-                    });
-                }
-            }
 
             console.log(innerForm);
         }
