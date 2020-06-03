@@ -12,7 +12,7 @@ import { API_URL, ACCESS_TOKEN_IDENTIFIER, USER_NAME, BASE_URL } from "../config
 import Loading from "./Loading";
 
 export default function Form(props) {
-    const { standard, project, notification } = props.route.params;
+    const { standard, project, notification, form } = props.route.params;
     const [loading, setLoading] = useState(false);
     const [selectors, setSelectors] = useState({});
     const [innerForm, setInnerForm] = useState({});
@@ -22,7 +22,7 @@ export default function Form(props) {
     const [showDate, setShowDate] = useState(false);
     const [showModalGuideImage, setShowModalGuideImage] = useState({});
 
-    const { formulario } = standard;
+    const formulario = form || standard.formulario;
 
     const updateFieldInnerForm = async (fieldId, value) => {
         if (value != null) {
@@ -174,15 +174,27 @@ export default function Form(props) {
                                     if (["Unauthorized.", "Unauthenticated."].includes(res.message)) {
                                         throwAccountError();
                                     } else {
-                                        if (formulario["keep_submitting"]["si"]) {
-                                            props.navigation.replace("Form", {
-                                                standard,
-                                                project,
-                                                notification: {
-                                                    type: "success",
-                                                    message: `Formulario enviado correctamente`
+                                        if (formulario["go_to_formulario"]) {
+                                            fetch(`${API_URL}/formularios/${formulario["go_to_formulario"]}`, {
+                                                method: "GET",
+                                                headers: {
+                                                    Accept: "application/json",
+                                                    "Content-Type": "application/json",
+                                                    Authorization: `Bearer ${token}`
                                                 }
-                                            });
+                                            })
+                                                .then((res) => res.json())
+                                                .then((form) => {
+                                                    props.navigation.replace("Form", {
+                                                        standard,
+                                                        project,
+                                                        form,
+                                                        notification: {
+                                                            type: "success",
+                                                            message: `Formulario enviado correctamente`
+                                                        }
+                                                    });
+                                                });
                                         } else {
                                             props.navigation.navigate("Projects", {
                                                 project,
@@ -569,7 +581,7 @@ export default function Form(props) {
                         ))}
                     <View style={styles.floatRight}>
                         <TouchableOpacity style={styles.buttomAction} onPress={() => saveData()}>
-                            <Text style={styles.textButton}>{formulario["keep_submitting"]["si"] ? "Guardar y Continuar" : "Guardar"}</Text>
+                            <Text style={styles.textButton}>{formulario["go_to_formulario"] ? "Guardar y Continuar" : "Guardar"}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
