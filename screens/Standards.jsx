@@ -86,7 +86,7 @@ export default function Standards(props) {
                                         project
                                     });
                                 } else {
-                                    Alert.alert("Esta norma no tiene tipo.");
+                                    Alert.alert("Esta función no tiene tipo.");
                                 }
                             }
                         }
@@ -115,7 +115,7 @@ export default function Standards(props) {
             {/* {error && <Text style={styles.notificationError}>Error cargando elementos.</Text>} */}
             <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
                 <View>
-                    <Text style={styles.title}>Elige la Norma</Text>
+                    <Text style={styles.title}>Funciones</Text>
                     {standards && !standards.length && <Text>No hay elementos.</Text>}
                     {standards &&
                         standards.map((standard) => (
