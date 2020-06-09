@@ -330,6 +330,21 @@ export default function Form(props) {
         }
     };
 
+    const onChangeTime = (date, fieldId) => {
+        setShowDate({});
+        if (date["type"] === "set") {
+            const { timestamp } = date["nativeEvent"];
+            const tmpDate = new Date(timestamp);
+            let hour = "" + (tmpDate.getHours());
+            let minute = "" + tmpDate.getMinutes();
+           
+            const finalDate = [hour, minute].join(":");
+
+            updateFieldInnerForm(fieldId, finalDate);
+        }
+    };
+
+
     if (loading) {
         return <Loading />;
     }
@@ -479,6 +494,31 @@ export default function Form(props) {
                                                         mode="date"
                                                         display="default"
                                                         onChange={(date) => onChangeDate(date, field.id)}
+                                                        minimumDate={field.rules && field.rules.includes("date_today") && new Date()}
+                                                        maximumDate={field.rules && field.rules.includes("date_today") && new Date()}
+                                                    />
+                                                )}
+                                                {isValidating && !isFieldValid(field) && <Text style={styles.textError}>Campo requerido</Text>}
+                                            </>
+                                        )}
+                                        {field.type === "TIME" && (
+                                            <>
+                                                <TouchableOpacity
+                                                    // disabled={true}
+                                                    onPress={() => showDatepicker(field.id)}
+                                                    style={[isValidating && !isFieldValid(field) ? styles.inputError : styles.inputs]}
+                                                >
+                                                    <Text>{innerForm[field.id] ? innerForm[field.id].value : "HH:MM"}</Text>
+                                                </TouchableOpacity>
+                                                {showDate[field.id] && (
+                                                    <DateTimePicker
+                                                        testID="dateTimePicker"
+                                                        timeZoneOffsetInMinutes={0}
+                                                        value={new Date()}
+                                                        is24Hour={true}
+                                                        mode="time"
+                                                        display="default"
+                                                        onChange={(date) => onChangeTime(date, field.id)}
                                                     />
                                                 )}
                                                 {isValidating && !isFieldValid(field) && <Text style={styles.textError}>Campo requerido</Text>}
