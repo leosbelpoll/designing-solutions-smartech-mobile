@@ -7,13 +7,14 @@ export const COLOR_LIGHT = "white";
 export const COLOR_DARK = "rgb(49,47,45)";
 export const COLOR_LIGHT_GREY = "rgb(211,211,210)";
 export const COLOR_DARK_GREY = "rgb(163,162,161)";
+export const COLOR_BACKGROUND = "#FFFAFA";
 
 const BORDER_RADIUS = 15;
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLOR_LIGHT,
+    backgroundColor: COLOR_BACKGROUND,
   },
   contentContainer: {
     paddingHorizontal: 35,
@@ -31,7 +32,7 @@ export default StyleSheet.create({
     paddingHorizontal: 20,
     flexDirection: "row",
     justifyContent: "space-between",
-    backgroundColor: COLOR_LIGHT,
+    backgroundColor: COLOR_BACKGROUND,
   },
   imagenHeader: {
     width: 150,
