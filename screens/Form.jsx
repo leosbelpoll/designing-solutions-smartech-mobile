@@ -527,9 +527,17 @@ export default function Form(props) {
                                                                 <Image
                                                                     source={{
                                                                         uri:
-                                                                            BASE_URL +
-                                                                            "/app/public/" +
-                                                                            field["guide_image"],
+                                                                            innerForm[field.id] &&
+                                                                            innerForm[field.id]
+                                                                                .value
+                                                                                ? innerForm[
+                                                                                      field.id
+                                                                                  ].value
+                                                                                : BASE_URL +
+                                                                                  "/app/public/" +
+                                                                                  field[
+                                                                                      "guide_image"
+                                                                                  ],
                                                                     }}
                                                                     style={{
                                                                         width: 300,
@@ -547,7 +555,9 @@ export default function Form(props) {
                                                     }}
                                                 >
                                                     <View>
-                                                        {field["guide_image"] && (
+                                                        {(field["guide_image"] ||
+                                                            (innerForm[field.id] &&
+                                                                innerForm[field.id])) && (
                                                             <TouchableHighlight
                                                                 // disabled={true}
                                                                 onPress={() =>
@@ -560,9 +570,17 @@ export default function Form(props) {
                                                                 <Image
                                                                     source={{
                                                                         uri:
-                                                                            BASE_URL +
-                                                                            "/app/public/" +
-                                                                            field["guide_image"],
+                                                                            innerForm[field.id] &&
+                                                                            innerForm[field.id]
+                                                                                .value
+                                                                                ? innerForm[
+                                                                                      field.id
+                                                                                  ].value
+                                                                                : BASE_URL +
+                                                                                  "/app/public/" +
+                                                                                  field[
+                                                                                      "guide_image"
+                                                                                  ],
                                                                     }}
                                                                     style={{
                                                                         width: 70,
