@@ -216,7 +216,7 @@ export default function Login(props) {
                     </TouchableOpacity>
                 </View>
                 <View style={customStyles.footer}>
-                    <Text style={{color: "#222"}}>
+                    <Text style={{ color: "#222" }}>
                         Aplicación de uso exclusivo para funcionarios y
                         contratistas de{" "}
                         <Text style={{ fontWeight: "bold" }}>
