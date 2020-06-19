@@ -74,7 +74,9 @@ export default function Projects(props) {
             )}
             <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
                 <View>
-                    <Text style={styles.title}>Elige un Projecto</Text>
+                    <Text style={styles.title}>
+                        Elija el proyecto para el cual va a diligenciar la información
+                    </Text>
                     {projects && !projects.length && <Text>No hay elementos.</Text>}
                     {projects &&
                         projects.map((project) => (

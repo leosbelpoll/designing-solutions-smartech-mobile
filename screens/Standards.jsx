@@ -8,6 +8,7 @@ import Loading from "./Loading";
 import HelpIcon from "../components/HelpIcon";
 
 export default function Standards(props) {
+    const [screenTitle, setScreenTitle] = useState();
     const [standards, setStandards] = useState();
     const { project } = props.route.params;
     const [loading, setLoading] = useState(false);
@@ -37,7 +38,8 @@ export default function Standards(props) {
                                 },
                             });
                         } else {
-                            setStandards(res);
+                            setStandards(res.standards);
+                            setScreenTitle(res.project.next_screen_title);
                             setLoading(false);
                         }
                     });
@@ -73,6 +75,7 @@ export default function Standards(props) {
                             setApiError(res.error);
                         } else {
                             if (res.standards && res.standards.length) {
+                                setScreenTitle(res.next_screen_title);
                                 setStandards(res.standards);
                             } else {
                                 if (standard.type === "FORM") {
@@ -116,7 +119,7 @@ export default function Standards(props) {
             {/* {error && <Text style={styles.notificationError}>Error cargando elementos.</Text>} */}
             <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
                 <View>
-                    <Text style={styles.title}>Funciones</Text>
+                    <Text style={styles.title}>{screenTitle ? screenTitle : "Funciones"}</Text>
                     {standards && !standards.length && <Text>No hay elementos.</Text>}
                     {standards &&
                         standards.map((standard) => (
