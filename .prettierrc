@@ -1,5 +1,7 @@
 {
-  "tabWidth": 4,
-  "useTabs": false,
-  "prettier.printWidth": 200
+    "printWidth": 100,
+    "trailingComma": "all",
+    "tabWidth": 4,
+    "semi": true,
+    "singleQuote": false
 }

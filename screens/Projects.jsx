@@ -21,8 +21,8 @@ export default function Projects(props) {
                     headers: {
                         Accept: "application/json",
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`
-                    }
+                        Authorization: `Bearer ${token}`,
+                    },
                 })
                     .then((res) => res.json())
                     .then((res) => {
@@ -32,8 +32,8 @@ export default function Projects(props) {
                             props.navigation.navigate("Login", {
                                 notification: {
                                     type: "error",
-                                    message: "Ingrese nuevamente por favor"
-                                }
+                                    message: "Ingrese nuevamente por favor",
+                                },
                             });
                         } else {
                             setProjects(res);
@@ -61,7 +61,11 @@ export default function Projects(props) {
             {/* {error && <Text style={styles.notificationError}>Error cargando elementos.</Text>} */}
             {notification && (
                 <Text
-                    style={notification.type === "success" ? styles.notificationSuccess : styles.notificationError}
+                    style={
+                        notification.type === "success"
+                            ? styles.notificationSuccess
+                            : styles.notificationError
+                    }
                     onPress={() => setNotification(null)}
                 >
                     {notification.message}
@@ -78,7 +82,7 @@ export default function Projects(props) {
                                 style={styles.buttom}
                                 onPress={() => {
                                     props.navigation.navigate("Standards", {
-                                        project
+                                        project,
                                     });
                                     setNotification(null);
                                 }}
@@ -93,6 +97,5 @@ export default function Projects(props) {
 }
 
 Projects.navigationOptions = {
-    name: "Projects"
+    name: "Projects",
 };
-

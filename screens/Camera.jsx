@@ -39,7 +39,7 @@ export default function CameraScreen(props) {
                     style={{
                         flex: 1,
                         backgroundColor: "transparent",
-                        justifyContent: "flex-end"
+                        justifyContent: "flex-end",
                     }}
                 >
                     {loading && (
@@ -47,7 +47,7 @@ export default function CameraScreen(props) {
                             style={{
                                 marginBottom: -40,
                                 marginRight: 100,
-                                alignSelf: "flex-end"
+                                alignSelf: "flex-end",
                             }}
                         >
                             <ActivityIndicator animating={true} color="white" size="large" />
@@ -56,10 +56,14 @@ export default function CameraScreen(props) {
                     <TouchableOpacity
                         style={{
                             marginBottom: -50,
-                            marginLeft: 100
+                            marginLeft: 100,
                         }}
                         onPress={() => {
-                            setType(type === Camera.Constants.Type.back ? Camera.Constants.Type.front : Camera.Constants.Type.back);
+                            setType(
+                                type === Camera.Constants.Type.back
+                                    ? Camera.Constants.Type.front
+                                    : Camera.Constants.Type.back,
+                            );
                         }}
                     >
                         <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
@@ -73,7 +77,7 @@ export default function CameraScreen(props) {
                             if (cameraRef) {
                                 setLoading(true);
                                 const photo = await cameraRef.takePictureAsync({
-                                    quality: 0.5
+                                    quality: 0.5,
                                 });
                                 operation(photo.uri);
                                 setLoading(false);
@@ -90,7 +94,7 @@ export default function CameraScreen(props) {
                                 width: 50,
                                 display: "flex",
                                 justifyContent: "center",
-                                alignItems: "center"
+                                alignItems: "center",
                             }}
                         >
                             <View
@@ -100,7 +104,7 @@ export default function CameraScreen(props) {
                                     borderColor: "white",
                                     height: 40,
                                     width: 40,
-                                    backgroundColor: "white"
+                                    backgroundColor: "white",
                                 }}
                             ></View>
                         </View>
@@ -112,5 +116,5 @@ export default function CameraScreen(props) {
 }
 
 CameraScreen.navigationOptions = {
-    name: "Camera"
+    name: "Camera",
 };

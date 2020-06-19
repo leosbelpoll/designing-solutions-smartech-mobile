@@ -1,21 +1,9 @@
 import React, { useState, useEffect } from "react";
-import {
-    Text,
-    TouchableOpacity,
-    AsyncStorage,
-    View,
-    TextInput,
-    StyleSheet,
-} from "react-native";
+import { Text, TouchableOpacity, AsyncStorage, View, TextInput, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import styles from "../styles";
 
-import {
-    API_URL,
-    ACCESS_TOKEN_IDENTIFIER,
-    USER_NAME,
-    PUSH_NOTIFICATION_TOKEN,
-} from "../configs";
+import { API_URL, ACCESS_TOKEN_IDENTIFIER, USER_NAME, PUSH_NOTIFICATION_TOKEN } from "../configs";
 import Loading from "./Loading";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -54,10 +42,7 @@ export default function Login(props) {
                     setUsername("");
                     setPassword("");
                     setError(null);
-                    AsyncStorage.setItem(
-                        ACCESS_TOKEN_IDENTIFIER,
-                        res["access_token"]
-                    );
+                    AsyncStorage.setItem(ACCESS_TOKEN_IDENTIFIER, res["access_token"]);
                     AsyncStorage.setItem(USER_NAME, username);
                     setPushNotificationToken();
                     setLoading(false);
@@ -73,9 +58,7 @@ export default function Login(props) {
     const setPushNotificationToken = async () => {
         const apiToken = await AsyncStorage.getItem(ACCESS_TOKEN_IDENTIFIER);
         const username = await AsyncStorage.getItem(USER_NAME);
-        const pushNotificationToken = await AsyncStorage.getItem(
-            PUSH_NOTIFICATION_TOKEN
-        );
+        const pushNotificationToken = await AsyncStorage.getItem(PUSH_NOTIFICATION_TOKEN);
 
         if (apiToken && pushNotificationToken && username) {
             setLoading(true);
@@ -110,11 +93,7 @@ export default function Login(props) {
             })
                 .then((res) => res.json())
                 .then((res) => {
-                    if (
-                        !["Unauthorized.", "Unauthenticated."].includes(
-                            res.message
-                        )
-                    ) {
+                    if (!["Unauthorized.", "Unauthenticated."].includes(res.message)) {
                         props.navigation.navigate("Projects");
                     }
                 })
@@ -143,41 +122,25 @@ export default function Login(props) {
         >
             <Header {...props} hideButtons={true} />
             {error && (
-                <Text
-                    style={styles.notificationError}
-                    onPress={() => setError(null)}
-                >
+                <Text style={styles.notificationError} onPress={() => setError(null)}>
                     Usuario o contraseña incorrecta.
                 </Text>
             )}
             {connectionError && (
-                <Text
-                    style={styles.notificationError}
-                    onPress={() => setError(null)}
-                >
+                <Text style={styles.notificationError} onPress={() => setError(null)}>
                     Ha ocurrido un error de red.
                 </Text>
             )}
             {validating && (!username || !password) && (
-                <Text
-                    style={styles.notificationError}
-                    onPress={() => isValidating(false)}
-                >
+                <Text style={styles.notificationError} onPress={() => isValidating(false)}>
                     Valide los campos del formulario.
                 </Text>
             )}
-            <ScrollView
-                style={styles.container}
-                contentContainerStyle={styles.contentContainer}
-            >
+            <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
                 <View>
                     <Text style={styles.title}> Inicio de Sesión </Text>
                     <TextInput
-                        style={
-                            validating && !username
-                                ? styles.inputError
-                                : styles.inputs
-                        }
+                        style={validating && !username ? styles.inputError : styles.inputs}
                         placeholder="Usuario"
                         onChangeText={(text) => {
                             setUsername(text);
@@ -190,9 +153,7 @@ export default function Login(props) {
                     )}
                     <TextInput
                         style={[
-                            validating && !password
-                                ? styles.inputError
-                                : styles.inputs,
+                            validating && !password ? styles.inputError : styles.inputs,
                             { marginTop: 20 },
                         ]}
                         placeholder="Contraseña"
@@ -206,10 +167,7 @@ export default function Login(props) {
                     {validating && !password && (
                         <Text style={styles.textError}>Campo requerido</Text>
                     )}
-                    <TouchableOpacity
-                        style={styles.buttom}
-                        onPress={() => onLogin()}
-                    >
+                    <TouchableOpacity style={styles.buttom} onPress={() => onLogin()}>
                         <Text style={styles.textButton}>
                             {loading ? "Loading ..." : "Iniciar Sesión"}
                         </Text>
@@ -217,11 +175,8 @@ export default function Login(props) {
                 </View>
                 <View style={customStyles.footer}>
                     <Text style={{ color: "#222" }}>
-                        Aplicación de uso exclusivo para funcionarios y
-                        contratistas de{" "}
-                        <Text style={{ fontWeight: "bold" }}>
-                            SMARTECH ® & ENERGY SYSTEMS
-                        </Text>
+                        Aplicación de uso exclusivo para funcionarios y contratistas de{" "}
+                        <Text style={{ fontWeight: "bold" }}>SMARTECH ® & ENERGY SYSTEMS</Text>
                     </Text>
                 </View>
             </ScrollView>

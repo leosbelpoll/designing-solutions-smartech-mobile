@@ -21,8 +21,8 @@ export default function Standards(props) {
                     headers: {
                         Accept: "application/json",
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`
-                    }
+                        Authorization: `Bearer ${token}`,
+                    },
                 })
                     .then((res) => res.json())
                     .then((res) => {
@@ -32,8 +32,8 @@ export default function Standards(props) {
                             props.navigation.navigate("Login", {
                                 notification: {
                                     type: "error",
-                                    message: "Ingrese nuevamente por favor"
-                                }
+                                    message: "Ingrese nuevamente por favor",
+                                },
                             });
                         } else {
                             setStandards(res);
@@ -54,8 +54,8 @@ export default function Standards(props) {
                     headers: {
                         Accept: "application/json",
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`
-                    }
+                        Authorization: `Bearer ${token}`,
+                    },
                 })
                     .then((res) => res.json())
                     .then((res) => {
@@ -65,8 +65,8 @@ export default function Standards(props) {
                             props.navigation.navigate("Login", {
                                 notification: {
                                     type: "error",
-                                    message: "Ingrese nuevamente por favor"
-                                }
+                                    message: "Ingrese nuevamente por favor",
+                                },
                             });
                         } else if (res.error) {
                             setApiError(res.error);
@@ -78,12 +78,12 @@ export default function Standards(props) {
                                     props.navigation.navigate("Form", {
                                         standard: res,
                                         project,
-                                        notification: null
+                                        notification: null,
                                     });
                                 } else if (standard.type === "VEHICLE") {
                                     props.navigation.navigate("Vehicle", {
                                         standard: res,
-                                        project
+                                        project,
                                     });
                                 } else {
                                     Alert.alert("Esta función no tiene tipo.");
@@ -119,7 +119,11 @@ export default function Standards(props) {
                     {standards && !standards.length && <Text>No hay elementos.</Text>}
                     {standards &&
                         standards.map((standard) => (
-                            <TouchableOpacity key={standard.id} style={styles.buttom} onPress={() => onClick(standard)}>
+                            <TouchableOpacity
+                                key={standard.id}
+                                style={styles.buttom}
+                                onPress={() => onClick(standard)}
+                            >
                                 <Text style={styles.textButton}>{standard.name}</Text>
                             </TouchableOpacity>
                         ))}
@@ -130,5 +134,5 @@ export default function Standards(props) {
 }
 
 Standards.navigationOptions = {
-    name: "Standards"
+    name: "Standards",
 };

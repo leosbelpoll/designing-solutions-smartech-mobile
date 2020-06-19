@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Image, Text, TouchableOpacity, TouchableHighlight, View, TextInput, AsyncStorage, Alert, CheckBox } from "react-native";
+import {
+    Modal,
+    Image,
+    Text,
+    TouchableOpacity,
+    TouchableHighlight,
+    View,
+    TextInput,
+    AsyncStorage,
+    Alert,
+    CheckBox,
+} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Picker } from "@react-native-community/picker";
 import * as Permissions from "expo-permissions";
@@ -31,8 +42,8 @@ export default function Form(props) {
                 [fieldId]: {
                     dependency_id: formulario.fields.find((f) => f.id === fieldId).field_id,
                     dependency_value: formulario.fields.find((f) => f.id === fieldId).field_value,
-                    value
-                }
+                    value,
+                },
             });
         }
     };
@@ -46,14 +57,23 @@ export default function Form(props) {
 
     const isValidDependentField = (fieldId) => {
         const field = formulario.fields.find((f) => f.id === fieldId);
-        return field && (!field.field_id || (innerForm[field.field_id] && containsValue(innerForm[field.field_id].value, field.field_value)));
+        return (
+            field &&
+            (!field.field_id ||
+                (innerForm[field.field_id] &&
+                    containsValue(innerForm[field.field_id].value, field.field_value)))
+        );
     };
 
     const isFieldValid = (field) => {
         let isFieldValid = true;
 
         if (field.type === "CHECK_OPTIONS_SI_NO_OTRO") {
-            if (innerForm[field.id] && innerForm[field.id].value.check === "Otro" && !innerForm[field.id].value.text) {
+            if (
+                innerForm[field.id] &&
+                innerForm[field.id].value.check === "Otro" &&
+                !innerForm[field.id].value.text
+            ) {
                 isFieldValid = false;
             }
         }
@@ -72,7 +92,11 @@ export default function Form(props) {
     };
 
     const isCheckedOption = (fieldId, value) => {
-        return innerForm[fieldId] && innerForm[fieldId].value && innerForm[fieldId].value.split("|").includes(value);
+        return (
+            innerForm[fieldId] &&
+            innerForm[fieldId].value &&
+            innerForm[fieldId].value.split("|").includes(value)
+        );
     };
 
     const toggleCheckOption = (fieldId, value) => {
@@ -82,12 +106,15 @@ export default function Form(props) {
                 innerForm[fieldId].value
                     .split("|")
                     .filter((option) => option !== value)
-                    .join("|")
+                    .join("|"),
             );
         } else if (!innerForm[fieldId]) {
             updateFieldInnerForm(fieldId, value);
         } else {
-            updateFieldInnerForm(fieldId, innerForm[fieldId] && innerForm[fieldId].value + "|" + value);
+            updateFieldInnerForm(
+                fieldId,
+                innerForm[fieldId] && innerForm[fieldId].value + "|" + value,
+            );
         }
     };
 
@@ -108,8 +135,8 @@ export default function Form(props) {
         props.navigation.navigate("Login", {
             notification: {
                 type: "error",
-                message: "Ingrese nuevamente por favor"
-            }
+                message: "Ingrese nuevamente por favor",
+            },
         });
     };
 
@@ -144,18 +171,24 @@ export default function Form(props) {
                                     if (
                                         innerForm[fieldId].value &&
                                         (!innerForm[fieldId].dependency_id ||
-                                            containsValue(innerForm[innerForm[fieldId].dependency_id].value, innerForm[fieldId].dependency_value))
+                                            containsValue(
+                                                innerForm[innerForm[fieldId].dependency_id].value,
+                                                innerForm[fieldId].dependency_value,
+                                            ))
                                     ) {
                                         arrayInnerForm.push({
                                             id: fieldId,
-                                            value: innerForm[fieldId].value
+                                            value: innerForm[fieldId].value,
                                         });
                                     }
                                 }
                             }
                             formulario.fields.forEach((field) => {
                                 if (field.type === "IMAGE" && innerForm[field.id]) {
-                                    formData.append(`field_${field.id}`, getFile(innerForm[field.id].value));
+                                    formData.append(
+                                        `field_${field.id}`,
+                                        getFile(innerForm[field.id].value),
+                                    );
                                 }
                             });
                             formData.append("fields", JSON.stringify(arrayInnerForm));
@@ -166,23 +199,28 @@ export default function Form(props) {
                                 headers: {
                                     Accept: "application/json",
                                     "Content-Type": "multipart/form-data",
-                                    Authorization: `Bearer ${token}`
-                                }
+                                    Authorization: `Bearer ${token}`,
+                                },
                             })
                                 .then((res) => res.json())
                                 .then((res) => {
-                                    if (["Unauthorized.", "Unauthenticated."].includes(res.message)) {
+                                    if (
+                                        ["Unauthorized.", "Unauthenticated."].includes(res.message)
+                                    ) {
                                         throwAccountError();
                                     } else {
                                         if (formulario["go_to_formulario"]) {
-                                            fetch(`${API_URL}/formularios/${formulario["go_to_formulario"]}`, {
-                                                method: "GET",
-                                                headers: {
-                                                    Accept: "application/json",
-                                                    "Content-Type": "application/json",
-                                                    Authorization: `Bearer ${token}`
-                                                }
-                                            })
+                                            fetch(
+                                                `${API_URL}/formularios/${formulario["go_to_formulario"]}`,
+                                                {
+                                                    method: "GET",
+                                                    headers: {
+                                                        Accept: "application/json",
+                                                        "Content-Type": "application/json",
+                                                        Authorization: `Bearer ${token}`,
+                                                    },
+                                                },
+                                            )
                                                 .then((res) => res.json())
                                                 .then((form) => {
                                                     props.navigation.replace("Form", {
@@ -191,8 +229,8 @@ export default function Form(props) {
                                                         form,
                                                         notification: {
                                                             type: "success",
-                                                            message: `Formulario enviado correctamente`
-                                                        }
+                                                            message: `Formulario enviado correctamente`,
+                                                        },
                                                     });
                                                 });
                                         } else {
@@ -202,8 +240,8 @@ export default function Form(props) {
                                                 username,
                                                 notification: {
                                                     type: "success",
-                                                    message: `Formulario enviado correctamente`
-                                                }
+                                                    message: `Formulario enviado correctamente`,
+                                                },
                                             });
                                         }
                                     }
@@ -252,8 +290,8 @@ export default function Form(props) {
                             headers: {
                                 Accept: "application/json",
                                 "Content-Type": "application/json",
-                                Authorization: `Bearer ${token}`
-                            }
+                                Authorization: `Bearer ${token}`,
+                            },
                         })
                             .then((res) => res.json())
                             .then((res) => {
@@ -263,13 +301,16 @@ export default function Form(props) {
                                     props.navigation.navigate("Login", {
                                         notification: {
                                             type: "error",
-                                            message: "Ingrese nuevamente por favor"
-                                        }
+                                            message: "Ingrese nuevamente por favor",
+                                        },
                                     });
                                 } else {
                                     setSelectors({
                                         ...selectors,
-                                        [field.selector]: res.map((item) => ({ value: item.id, label: item.name }))
+                                        [field.selector]: res.map((item) => ({
+                                            value: item.id,
+                                            label: item.name,
+                                        })),
                                     });
                                 }
                             })
@@ -291,7 +332,7 @@ export default function Form(props) {
 
         if (resultPermission) {
             const resultImagePiker = await ImagePicker.launchImageLibraryAsync({
-                allowsEditing: true
+                allowsEditing: true,
             });
             return resultImagePiker;
         }
@@ -302,7 +343,7 @@ export default function Form(props) {
 
         if (status === "granted") {
             props.navigation.navigate("Camera", {
-                operation
+                operation,
             });
         } else {
             Alert.alert("La app no tiene permisos para usar la camara");
@@ -335,15 +376,14 @@ export default function Form(props) {
         if (date["type"] === "set") {
             const { timestamp } = date["nativeEvent"];
             const tmpDate = new Date(timestamp);
-            let hour = "" + (tmpDate.getHours());
+            let hour = "" + tmpDate.getHours();
             let minute = "" + tmpDate.getMinutes();
-           
+
             const finalDate = [hour, minute].join(":");
 
             updateFieldInnerForm(fieldId, finalDate);
         }
     };
-
 
     if (loading) {
         return <Loading />;
@@ -353,52 +393,111 @@ export default function Form(props) {
         <View style={styles.container}>
             <Header {...props} />
             {!isInvalidForm && notif && (
-                <Text style={notif.type === "success" ? styles.notificationSuccess : styles.notificationError} onPress={() => setNotif(null)}>
+                <Text
+                    style={
+                        notif.type === "success"
+                            ? styles.notificationSuccess
+                            : styles.notificationError
+                    }
+                    onPress={() => setNotif(null)}
+                >
                     {notif.message}
                 </Text>
             )}
-            {isInvalidForm && <Text style={styles.notificationError}>Verifique los campos del formulario.</Text>}
-            <ScrollView style={styles.container} contentContainerStyle={styles.contentContainerForm}>
+            {isInvalidForm && (
+                <Text style={styles.notificationError}>Verifique los campos del formulario.</Text>
+            )}
+            <ScrollView
+                style={styles.container}
+                contentContainerStyle={styles.contentContainerForm}
+            >
                 <View>
                     {formulario.fields
-                        .sort((a, b) => (a.position > b.position ? 1 : b.position > a.position ? -1 : 0))
+                        .sort((a, b) =>
+                            a.position > b.position ? 1 : b.position > a.position ? -1 : 0,
+                        )
                         .map((field) => (
                             <React.Fragment key={field.id}>
                                 {(!field.field_id || isValidDependentField(field.id)) && (
                                     <>
-                                        {field.label && <Text style={styles.label}>{field.label}</Text>}
+                                        {field.label && (
+                                            <Text style={styles.label}>{field.label}</Text>
+                                        )}
                                         {!field.label && <View style={{ marginBottom: 20 }}></View>}
-                                        {["NUMBER", "SHORT_TEXT", "LONG_TEXT"].includes(field.type) && (
+                                        {["NUMBER", "SHORT_TEXT", "LONG_TEXT"].includes(
+                                            field.type,
+                                        ) && (
                                             <>
                                                 <TextInput
                                                     // editable={false}
-                                                    keyboardType={field.type === "NUMBER" ? "numeric" : "default"}
+                                                    keyboardType={
+                                                        field.type === "NUMBER"
+                                                            ? "numeric"
+                                                            : "default"
+                                                    }
                                                     style={[
-                                                        isValidating && !isFieldValid(field) ? styles.inputError : styles.inputs,
-                                                        field.type === "LONG_TEXT" && styles.inputArea
+                                                        isValidating && !isFieldValid(field)
+                                                            ? styles.inputError
+                                                            : styles.inputs,
+                                                        field.type === "LONG_TEXT" &&
+                                                            styles.inputArea,
                                                     ]}
                                                     placeholder={field.placeholder}
-                                                    onChangeText={(text) => updateFieldInnerForm(field.id, text)}
+                                                    onChangeText={(text) =>
+                                                        updateFieldInnerForm(field.id, text)
+                                                    }
                                                 />
-                                                {isValidating && !isFieldValid(field) && <Text style={styles.textError}>Campo requerido</Text>}
+                                                {isValidating && !isFieldValid(field) && (
+                                                    <Text style={styles.textError}>
+                                                        Campo requerido
+                                                    </Text>
+                                                )}
                                             </>
                                         )}
                                         {field.type === "SELECTOR_NOMENCLADOR" && (
                                             <>
-                                                <View style={[styles.select, isValidating && !isFieldValid(field) && styles.selectError]}>
+                                                <View
+                                                    style={[
+                                                        styles.select,
+                                                        isValidating &&
+                                                            !isFieldValid(field) &&
+                                                            styles.selectError,
+                                                    ]}
+                                                >
                                                     <Picker
                                                         // enabled={false}
-                                                        onValueChange={(itemValue) => updateFieldInnerForm(field.id, itemValue)}
-                                                        selectedValue={innerForm[field.id] && innerForm[field.id].value}
+                                                        onValueChange={(itemValue) =>
+                                                            updateFieldInnerForm(
+                                                                field.id,
+                                                                itemValue,
+                                                            )
+                                                        }
+                                                        selectedValue={
+                                                            innerForm[field.id] &&
+                                                            innerForm[field.id].value
+                                                        }
                                                     >
-                                                        <Picker.Item label=" - Seleccione una opción - " value={null} />
+                                                        <Picker.Item
+                                                            label=" - Seleccione una opción - "
+                                                            value={null}
+                                                        />
                                                         {selectors[field.selector] &&
-                                                            selectors[field.selector].map((item) => (
-                                                                <Picker.Item key={item.value} label={item.label} value={item.value} />
+                                                            selectors[
+                                                                field.selector
+                                                            ].map((item) => (
+                                                                <Picker.Item
+                                                                    key={item.value}
+                                                                    label={item.label}
+                                                                    value={item.value}
+                                                                />
                                                             ))}
                                                     </Picker>
                                                 </View>
-                                                {isValidating && !isFieldValid(field) && <Text style={styles.textError}>Campo requerido</Text>}
+                                                {isValidating && !isFieldValid(field) && (
+                                                    <Text style={styles.textError}>
+                                                        Campo requerido
+                                                    </Text>
+                                                )}
                                             </>
                                         )}
                                         {field.type === "IMAGE" && (
@@ -410,7 +509,7 @@ export default function Form(props) {
                                                     onRequestClose={() =>
                                                         setShowModalGuideImage({
                                                             ...showModalGuideImage,
-                                                            [field.id]: false
+                                                            [field.id]: false,
                                                         })
                                                     }
                                                 >
@@ -420,19 +519,32 @@ export default function Form(props) {
                                                                 onPress={() =>
                                                                     setShowModalGuideImage({
                                                                         ...showModalGuideImage,
-                                                                        [field.id]: false
+                                                                        [field.id]: false,
                                                                     })
                                                                 }
                                                             >
                                                                 <Image
-                                                                    source={{ uri: BASE_URL + "/app/public/" + field["guide_image"] }}
-                                                                    style={{ width: 300, height: 300 }}
+                                                                    source={{
+                                                                        uri:
+                                                                            BASE_URL +
+                                                                            "/app/public/" +
+                                                                            field["guide_image"],
+                                                                    }}
+                                                                    style={{
+                                                                        width: 300,
+                                                                        height: 300,
+                                                                    }}
                                                                 />
                                                             </TouchableHighlight>
                                                         </View>
                                                     </View>
                                                 </Modal>
-                                                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                                                <View
+                                                    style={{
+                                                        flexDirection: "row",
+                                                        justifyContent: "space-between",
+                                                    }}
+                                                >
                                                     <View>
                                                         {field["guide_image"] && (
                                                             <TouchableHighlight
@@ -440,13 +552,21 @@ export default function Form(props) {
                                                                 onPress={() =>
                                                                     setShowModalGuideImage({
                                                                         ...showModalGuideImage,
-                                                                        [field.id]: true
+                                                                        [field.id]: true,
                                                                     })
                                                                 }
                                                             >
                                                                 <Image
-                                                                    source={{ uri: BASE_URL + "/app/public/" + field["guide_image"] }}
-                                                                    style={{ width: 70, height: 70 }}
+                                                                    source={{
+                                                                        uri:
+                                                                            BASE_URL +
+                                                                            "/app/public/" +
+                                                                            field["guide_image"],
+                                                                    }}
+                                                                    style={{
+                                                                        width: 70,
+                                                                        height: 70,
+                                                                    }}
                                                                 />
                                                             </TouchableHighlight>
                                                         )}
@@ -455,25 +575,38 @@ export default function Form(props) {
                                                         <TouchableOpacity
                                                             // disabled={true}
                                                             style={
-                                                                innerForm[field.id] && innerForm[field.id]
+                                                                innerForm[field.id] &&
+                                                                innerForm[field.id]
                                                                     ? styles.buttonFile
                                                                     : styles.buttonEmptyFile
                                                             }
                                                             onPress={async () => {
                                                                 const setImage = (uri) => {
-                                                                    updateFieldInnerForm(field.id, uri);
+                                                                    updateFieldInnerForm(
+                                                                        field.id,
+                                                                        uri,
+                                                                    );
                                                                 };
-                                                                props.navigation.navigate("Camera", {
-                                                                    operation: setImage
-                                                                });
+                                                                props.navigation.navigate(
+                                                                    "Camera",
+                                                                    {
+                                                                        operation: setImage,
+                                                                    },
+                                                                );
                                                             }}
                                                         >
-                                                            <Text style={styles.textLight}>Seleccionar imágen</Text>
+                                                            <Text style={styles.textLight}>
+                                                                Seleccionar imágen
+                                                            </Text>
                                                         </TouchableOpacity>
                                                     </View>
                                                 </View>
                                                 {isValidating && !isFieldValid(field) && (
-                                                    <Text style={[styles.textRight, styles.textError]}>Imágen requerida</Text>
+                                                    <Text
+                                                        style={[styles.textRight, styles.textError]}
+                                                    >
+                                                        Imágen requerida
+                                                    </Text>
                                                 )}
                                             </>
                                         )}
@@ -482,9 +615,17 @@ export default function Form(props) {
                                                 <TouchableOpacity
                                                     // disabled={true}
                                                     onPress={() => showDatepicker(field.id)}
-                                                    style={[isValidating && !isFieldValid(field) ? styles.inputError : styles.inputs]}
+                                                    style={[
+                                                        isValidating && !isFieldValid(field)
+                                                            ? styles.inputError
+                                                            : styles.inputs,
+                                                    ]}
                                                 >
-                                                    <Text>{innerForm[field.id] ? innerForm[field.id].value : "DD/MM/AAAA"}</Text>
+                                                    <Text>
+                                                        {innerForm[field.id]
+                                                            ? innerForm[field.id].value
+                                                            : "DD/MM/AAAA"}
+                                                    </Text>
                                                 </TouchableOpacity>
                                                 {showDate[field.id] && (
                                                     <DateTimePicker
@@ -493,12 +634,26 @@ export default function Form(props) {
                                                         value={new Date()}
                                                         mode="date"
                                                         display="default"
-                                                        onChange={(date) => onChangeDate(date, field.id)}
-                                                        minimumDate={field.rules && field.rules.includes("date_today") && new Date()}
-                                                        maximumDate={field.rules && field.rules.includes("date_today") && new Date()}
+                                                        onChange={(date) =>
+                                                            onChangeDate(date, field.id)
+                                                        }
+                                                        minimumDate={
+                                                            field.rules &&
+                                                            field.rules.includes("date_today") &&
+                                                            new Date()
+                                                        }
+                                                        maximumDate={
+                                                            field.rules &&
+                                                            field.rules.includes("date_today") &&
+                                                            new Date()
+                                                        }
                                                     />
                                                 )}
-                                                {isValidating && !isFieldValid(field) && <Text style={styles.textError}>Campo requerido</Text>}
+                                                {isValidating && !isFieldValid(field) && (
+                                                    <Text style={styles.textError}>
+                                                        Campo requerido
+                                                    </Text>
+                                                )}
                                             </>
                                         )}
                                         {field.type === "TIME" && (
@@ -506,9 +661,17 @@ export default function Form(props) {
                                                 <TouchableOpacity
                                                     // disabled={true}
                                                     onPress={() => showDatepicker(field.id)}
-                                                    style={[isValidating && !isFieldValid(field) ? styles.inputError : styles.inputs]}
+                                                    style={[
+                                                        isValidating && !isFieldValid(field)
+                                                            ? styles.inputError
+                                                            : styles.inputs,
+                                                    ]}
                                                 >
-                                                    <Text>{innerForm[field.id] ? innerForm[field.id].value : "HH:MM"}</Text>
+                                                    <Text>
+                                                        {innerForm[field.id]
+                                                            ? innerForm[field.id].value
+                                                            : "HH:MM"}
+                                                    </Text>
                                                 </TouchableOpacity>
                                                 {showDate[field.id] && (
                                                     <DateTimePicker
@@ -518,101 +681,231 @@ export default function Form(props) {
                                                         is24Hour={true}
                                                         mode="time"
                                                         display="default"
-                                                        onChange={(date) => onChangeTime(date, field.id)}
+                                                        onChange={(date) =>
+                                                            onChangeTime(date, field.id)
+                                                        }
                                                     />
                                                 )}
-                                                {isValidating && !isFieldValid(field) && <Text style={styles.textError}>Campo requerido</Text>}
+                                                {isValidating && !isFieldValid(field) && (
+                                                    <Text style={styles.textError}>
+                                                        Campo requerido
+                                                    </Text>
+                                                )}
                                             </>
                                         )}
                                         {field.type === "SELECTOR_OPTIONS" && (
                                             <>
-                                                <View style={[styles.select, isValidating && !isFieldValid(field) && styles.selectError]}>
+                                                <View
+                                                    style={[
+                                                        styles.select,
+                                                        isValidating &&
+                                                            !isFieldValid(field) &&
+                                                            styles.selectError,
+                                                    ]}
+                                                >
                                                     <Picker
                                                         // enabled={false}
-                                                        onValueChange={(itemValue) => updateFieldInnerForm(field.id, itemValue)}
-                                                        selectedValue={innerForm[field.id] && innerForm[field.id].value}
+                                                        onValueChange={(itemValue) =>
+                                                            updateFieldInnerForm(
+                                                                field.id,
+                                                                itemValue,
+                                                            )
+                                                        }
+                                                        selectedValue={
+                                                            innerForm[field.id] &&
+                                                            innerForm[field.id].value
+                                                        }
                                                     >
-                                                        <Picker.Item label=" - Seleccione una opción - " value={null} />
+                                                        <Picker.Item
+                                                            label=" - Seleccione una opción - "
+                                                            value={null}
+                                                        />
                                                         {field.options &&
                                                             field.options
                                                                 .split("|")
-                                                                .map((item) => <Picker.Item key={item} label={item} value={item} />)}
+                                                                .map((item) => (
+                                                                    <Picker.Item
+                                                                        key={item}
+                                                                        label={item}
+                                                                        value={item}
+                                                                    />
+                                                                ))}
                                                     </Picker>
                                                 </View>
-                                                {isValidating && !isFieldValid(field) && <Text style={styles.textError}>Campo requerido</Text>}
+                                                {isValidating && !isFieldValid(field) && (
+                                                    <Text style={styles.textError}>
+                                                        Campo requerido
+                                                    </Text>
+                                                )}
                                             </>
                                         )}
                                         {field.type === "CHECK_OPTIONS" && (
                                             <>
                                                 {field.options &&
                                                     field.options.split("|").map((item) => (
-                                                        <View style={{ flexDirection: "column" }} key={item}>
-                                                            <View style={{ flexDirection: "row" }}>
+                                                        <View
+                                                            style={{
+                                                                flexDirection: "column",
+                                                            }}
+                                                            key={item}
+                                                        >
+                                                            <View
+                                                                style={{
+                                                                    flexDirection: "row",
+                                                                }}
+                                                            >
                                                                 <CheckBox
                                                                     // disabled={true}
-                                                                    onValueChange={() => toggleCheckOption(field.id, item)}
-                                                                    value={isCheckedOption(field.id, item)}
+                                                                    onValueChange={() =>
+                                                                        toggleCheckOption(
+                                                                            field.id,
+                                                                            item,
+                                                                        )
+                                                                    }
+                                                                    value={isCheckedOption(
+                                                                        field.id,
+                                                                        item,
+                                                                    )}
                                                                 />
-                                                                <Text style={{ marginTop: 5 }}> {item}</Text>
+                                                                <Text
+                                                                    style={{
+                                                                        marginTop: 5,
+                                                                    }}
+                                                                >
+                                                                    {" "}
+                                                                    {item}
+                                                                </Text>
                                                             </View>
                                                         </View>
                                                     ))}
-                                                {isValidating && !isFieldValid(field) && <Text style={styles.textError}>Campo requerido</Text>}
+                                                {isValidating && !isFieldValid(field) && (
+                                                    <Text style={styles.textError}>
+                                                        Campo requerido
+                                                    </Text>
+                                                )}
                                                 <View style={{ marginBottom: 10 }}></View>
                                             </>
                                         )}
                                         {field.type === "CHECK_OPTIONS_SI_NO_OTRO" && (
                                             <>
-                                                <View style={{ flexDirection: "column" }}>
-                                                    <View style={{ flexDirection: "row" }}>
+                                                <View
+                                                    style={{
+                                                        flexDirection: "column",
+                                                    }}
+                                                >
+                                                    <View
+                                                        style={{
+                                                            flexDirection: "row",
+                                                        }}
+                                                    >
                                                         <CheckBox
                                                             // disabled={true}
-                                                            value={innerForm[field.id] && innerForm[field.id].value === "Si"}
-                                                            onValueChange={() => updateFieldInnerForm(field.id, "Si")}
+                                                            value={
+                                                                innerForm[field.id] &&
+                                                                innerForm[field.id].value === "Si"
+                                                            }
+                                                            onValueChange={() =>
+                                                                updateFieldInnerForm(field.id, "Si")
+                                                            }
                                                         />
-                                                        <Text style={{ marginTop: 5 }}> Si</Text>
+                                                        <Text
+                                                            style={{
+                                                                marginTop: 5,
+                                                            }}
+                                                        >
+                                                            {" "}
+                                                            Si
+                                                        </Text>
                                                     </View>
                                                 </View>
-                                                <View style={{ flexDirection: "column" }}>
-                                                    <View style={{ flexDirection: "row" }}>
+                                                <View
+                                                    style={{
+                                                        flexDirection: "column",
+                                                    }}
+                                                >
+                                                    <View
+                                                        style={{
+                                                            flexDirection: "row",
+                                                        }}
+                                                    >
                                                         <CheckBox
                                                             // disabled={true}
-                                                            value={innerForm[field.id] && innerForm[field.id].value === "No"}
-                                                            onValueChange={() => updateFieldInnerForm(field.id, "No")}
+                                                            value={
+                                                                innerForm[field.id] &&
+                                                                innerForm[field.id].value === "No"
+                                                            }
+                                                            onValueChange={() =>
+                                                                updateFieldInnerForm(field.id, "No")
+                                                            }
                                                         />
-                                                        <Text style={{ marginTop: 5 }}> No</Text>
+                                                        <Text
+                                                            style={{
+                                                                marginTop: 5,
+                                                            }}
+                                                        >
+                                                            {" "}
+                                                            No
+                                                        </Text>
                                                     </View>
                                                 </View>
-                                                <View style={{ flexDirection: "column" }}>
-                                                    <View style={{ flexDirection: "row" }}>
+                                                <View
+                                                    style={{
+                                                        flexDirection: "column",
+                                                    }}
+                                                >
+                                                    <View
+                                                        style={{
+                                                            flexDirection: "row",
+                                                        }}
+                                                    >
                                                         <CheckBox
                                                             // disabled={true}
                                                             value={
                                                                 innerForm[field.id] &&
                                                                 innerForm[field.id].value &&
-                                                                ![undefined, "Si", "No"].includes(innerForm[field.id].value)
+                                                                ![undefined, "Si", "No"].includes(
+                                                                    innerForm[field.id].value,
+                                                                )
                                                             }
-                                                            onValueChange={() => updateFieldInnerForm(field.id, "")}
+                                                            onValueChange={() =>
+                                                                updateFieldInnerForm(field.id, "")
+                                                            }
                                                         />
-                                                        <Text style={{ marginTop: 5 }}> Otro</Text>
+                                                        <Text
+                                                            style={{
+                                                                marginTop: 5,
+                                                            }}
+                                                        >
+                                                            {" "}
+                                                            Otro
+                                                        </Text>
                                                         <TextInput
                                                             // editable={false}
                                                             style={{
-                                                                borderBottomColor: "rgba(0, 0, 0, 0.2)",
+                                                                borderBottomColor:
+                                                                    "rgba(0, 0, 0, 0.2)",
                                                                 borderBottomWidth: 1,
                                                                 width: 200,
-                                                                marginLeft: 10
+                                                                marginLeft: 10,
                                                             }}
                                                             value={
                                                                 innerForm[field.id] &&
-                                                                !["Si", "No"].includes(innerForm[field.id].value) &&
+                                                                !["Si", "No"].includes(
+                                                                    innerForm[field.id].value,
+                                                                ) &&
                                                                 innerForm[field.id].value
                                                             }
-                                                            onChangeText={(text) => updateFieldInnerForm(field.id, text)}
+                                                            onChangeText={(text) =>
+                                                                updateFieldInnerForm(field.id, text)
+                                                            }
                                                         />
                                                     </View>
                                                 </View>
-                                                {isValidating && !isFieldValid(field) && <Text style={styles.textError}>Campo requerido</Text>}
+                                                {isValidating && !isFieldValid(field) && (
+                                                    <Text style={styles.textError}>
+                                                        Campo requerido
+                                                    </Text>
+                                                )}
                                             </>
                                         )}
                                     </>
@@ -621,7 +914,9 @@ export default function Form(props) {
                         ))}
                     <View style={styles.floatRight}>
                         <TouchableOpacity style={styles.buttomAction} onPress={() => saveData()}>
-                            <Text style={styles.textButton}>{formulario["go_to_formulario"] ? "Guardar y Continuar" : "Guardar"}</Text>
+                            <Text style={styles.textButton}>
+                                {formulario["go_to_formulario"] ? "Guardar y Continuar" : "Guardar"}
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -631,5 +926,5 @@ export default function Form(props) {
 }
 
 Form.navigationOptions = {
-    name: "Form"
+    name: "Form",
 };
