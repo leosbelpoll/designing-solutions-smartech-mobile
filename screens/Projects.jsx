@@ -4,6 +4,7 @@ import styles from "../styles";
 import { ScrollView } from "react-native-gesture-handler";
 import { API_URL, ACCESS_TOKEN_IDENTIFIER, USER_NAME } from "../configs";
 import Header from "../components/Header";
+import HelpIcon from "../components/HelpIcon";
 import Loading from "./Loading";
 
 export default function Projects(props) {
@@ -92,6 +93,7 @@ export default function Projects(props) {
                         ))}
                 </View>
             </ScrollView>
+            <HelpIcon {...props} />
         </View>
     );
 }

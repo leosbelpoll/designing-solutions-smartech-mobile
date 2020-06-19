@@ -21,6 +21,7 @@ import Header from "../components/Header";
 import styles from "../styles";
 import { API_URL, ACCESS_TOKEN_IDENTIFIER, USER_NAME, BASE_URL } from "../configs";
 import Loading from "./Loading";
+import HelpIcon from "../components/HelpIcon";
 
 export default function Form(props) {
     const { standard, project, notification, form } = props.route.params;
@@ -921,6 +922,7 @@ export default function Form(props) {
                     </View>
                 </View>
             </ScrollView>
+            <HelpIcon {...props} />
         </View>
     );
 }

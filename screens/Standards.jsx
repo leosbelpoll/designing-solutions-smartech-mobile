@@ -5,6 +5,7 @@ import styles from "../styles";
 import { ACCESS_TOKEN_IDENTIFIER, API_URL, USER_NAME } from "../configs";
 import Header from "../components/Header";
 import Loading from "./Loading";
+import HelpIcon from "../components/HelpIcon";
 
 export default function Standards(props) {
     const [standards, setStandards] = useState();
@@ -129,6 +130,7 @@ export default function Standards(props) {
                         ))}
                 </View>
             </ScrollView>
+            <HelpIcon {...props} />
         </View>
     );
 }
