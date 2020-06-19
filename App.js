@@ -13,7 +13,6 @@ import Login from "./screens/Login";
 import Projects from "./screens/Projects";
 import Standards from "./screens/Standards";
 import Form from "./screens/Form";
-import Footer from "./components/Footer";
 import Vehicle from "./screens/Vehicle";
 import Camera from "./screens/Camera";
 import { PUSH_NOTIFICATION_TOKEN } from "./configs";
@@ -40,7 +39,7 @@ export default function App(props) {
 		  } else {
 			Alert.alert('Debe usar un dispositivo fisico');
 		  }
-	  
+
 		  if (Platform.OS === 'android') {
 			Notifications.createChannelAndroidAsync('default', {
 			  name: 'default',
@@ -109,7 +108,6 @@ export default function App(props) {
 						<Stack.Screen name="Form" component={Form} />
 					</Stack.Navigator>
 				</NavigationContainer>
-				<Footer />
 			</View>
 		);
 	}

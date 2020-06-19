@@ -7,7 +7,6 @@ import Header from "../components/Header";
 import Loading from "./Loading";
 
 export default function Projects(props) {
-    const { navigation } = props;
     const { route } = props;
     const [projects, setProjects] = useState();
     const [notification, setNotification] = useState();
@@ -96,3 +95,4 @@ export default function Projects(props) {
 Projects.navigationOptions = {
     name: "Projects"
 };
+
