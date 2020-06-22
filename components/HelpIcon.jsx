@@ -12,7 +12,7 @@ export default function HelpIcon(props) {
                         props.navigation.navigate("Help");
                     }}
                 >
-                    <FontAwesome name="help" size={24} color="white" />
+                    <FontAwesome name="question" size={24} color="white" />
                 </TouchableOpacity>
             </View>
         </>
