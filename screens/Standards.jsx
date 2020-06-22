@@ -10,7 +10,7 @@ import HelpIcon from "../components/HelpIcon";
 export default function Standards(props) {
     const [screenTitle, setScreenTitle] = useState();
     const [standards, setStandards] = useState();
-    const { project } = props.route.params;
+    const { project, superStandard } = props.route.params;
     const [loading, setLoading] = useState(false);
     const [apiError, setApiError] = useState(false);
 
@@ -75,8 +75,16 @@ export default function Standards(props) {
                             setApiError(res.error);
                         } else {
                             if (res.standards && res.standards.length) {
-                                setScreenTitle(res.next_screen_title);
-                                setStandards(res.standards);
+                                props.navigation.navigate({
+                                    name: "Standards",
+                                    params: {
+                                        superStandard: {
+                                            next_screen_title: res.next_screen_title,
+                                            standards: res.standards,
+                                        },
+                                    },
+                                    key: Math.random() * 10000,
+                                });
                             } else {
                                 if (standard.type === "FORM") {
                                     props.navigation.navigate("Form", {
@@ -101,7 +109,12 @@ export default function Standards(props) {
     };
 
     useEffect(() => {
-        fetchMyAPI();
+        if (project) {
+            fetchMyAPI();
+        } else if (superStandard) {
+            setScreenTitle(superStandard.next_screen_title);
+            setStandards(superStandard.standards);
+        }
     }, []);
 
     if (loading) {
