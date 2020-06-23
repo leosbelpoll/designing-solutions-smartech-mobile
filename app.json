@@ -8,9 +8,9 @@
         "icon": "./assets/images/icono-app.png",
         "scheme": "myapp",
         "splash": {
-            "image": "./assets/images/logo-app.png",
+            "image": "./assets/images/logo-app1.png",
             "resizeMode": "contain",
-            "backgroundColor": "#b7c62f"
+            "backgroundColor": "#FFFAFA"
         },
         "updates": {
             "fallbackToCacheTimeout": 0

@@ -26,7 +26,7 @@ export default function Header(props) {
         <View style={styles.containerHeader}>
             <View>
                 <Image
-                    source={require("../assets/images/header-app.png")}
+                    source={require("../assets/images/header-app1.png")}
                     style={styles.imagenHeader}
                 />
             </View>
