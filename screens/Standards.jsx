@@ -82,6 +82,7 @@ export default function Standards(props) {
                                             next_screen_title: res.next_screen_title,
                                             standards: res.standards,
                                         },
+                                        project,
                                     },
                                     key: Math.random() * 10000,
                                 });
@@ -109,7 +110,7 @@ export default function Standards(props) {
     };
 
     useEffect(() => {
-        if (project) {
+        if (project && !superStandard) {
             fetchMyAPI();
         } else if (superStandard) {
             setScreenTitle(superStandard.next_screen_title);

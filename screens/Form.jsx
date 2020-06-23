@@ -16,6 +16,7 @@ import { Picker } from "@react-native-community/picker";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { RadioButton } from "react-native-paper";
 
 import Header from "../components/Header";
 import styles from "../styles";
@@ -785,6 +786,57 @@ export default function Form(props) {
                                                                         field.id,
                                                                         item,
                                                                     )}
+                                                                />
+                                                                <Text
+                                                                    style={{
+                                                                        marginTop: 5,
+                                                                    }}
+                                                                >
+                                                                    {" "}
+                                                                    {item}
+                                                                </Text>
+                                                            </View>
+                                                        </View>
+                                                    ))}
+                                                {isValidating && !isFieldValid(field) && (
+                                                    <Text style={styles.textError}>
+                                                        Campo requerido
+                                                    </Text>
+                                                )}
+                                                <View style={{ marginBottom: 10 }}></View>
+                                            </>
+                                        )}
+                                        {field.type === "RADIO_OPTIONS" && (
+                                            <>
+                                                {field.options &&
+                                                    field.options.split("|").map((item) => (
+                                                        <View
+                                                            style={{
+                                                                flexDirection: "column",
+                                                            }}
+                                                            key={item}
+                                                        >
+                                                            <View
+                                                                style={{
+                                                                    flexDirection: "row",
+                                                                }}
+                                                            >
+                                                                <RadioButton
+                                                                    value={item}
+                                                                    color={"green"}
+                                                                    status={
+                                                                        innerForm[field.id] &&
+                                                                        innerForm[field.id]
+                                                                            .value === item
+                                                                            ? "checked"
+                                                                            : "unchecked"
+                                                                    }
+                                                                    onPress={() =>
+                                                                        updateFieldInnerForm(
+                                                                            field.id,
+                                                                            item,
+                                                                        )
+                                                                    }
                                                                 />
                                                                 <Text
                                                                     style={{
