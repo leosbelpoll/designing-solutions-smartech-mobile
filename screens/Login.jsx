@@ -6,7 +6,7 @@ import styles from "../styles";
 import { API_URL, ACCESS_TOKEN_IDENTIFIER, USER_NAME, PUSH_NOTIFICATION_TOKEN } from "../configs";
 import Loading from "./Loading";
 import Header from "../components/Header";
-import Footer from "../components/Footer";
+import HelpIcon from "../components/HelpIcon";
 
 export default function Login(props) {
     const [error, setError] = useState();
@@ -180,6 +180,7 @@ export default function Login(props) {
                     </Text>
                 </View>
             </ScrollView>
+            <HelpIcon {...props} />
         </View>
     );
 }
@@ -190,7 +191,7 @@ Login.navigationOptions = {
 
 const customStyles = StyleSheet.create({
     footer: {
-        marginTop: 150,
+        marginTop: 30,
         textAlign: "center",
     },
 });

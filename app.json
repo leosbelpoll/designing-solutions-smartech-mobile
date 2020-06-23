@@ -1,39 +1,33 @@
 {
-  "expo": {
-    "name": "designin-solutions",
-    "slug": "designin-solutions",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/images/icono-app.png",
-    "scheme": "myapp",
-    "splash": {
-      "image": "./assets/images/logo-app.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#b7c62f"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "web": {
-      "favicon": "./assets/images/icono-app.png"
-    },
-    "sdkVersion": "37.0.0",
-    "android": {
-      "package": "com.designingsolutions.smartech",
-      "versionCode": 1,
-      "permissions": ["CAMERA", "CAMERA_ROLL", "NOTIFICATIONS"],
-      "googleServicesFile": "./google-services.json"
-    },
-    "ios": {
-      "bundleIdentifier": "com.designingsolutions.smartech"
+    "expo": {
+        "name": "designin-solutions",
+        "slug": "designin-solutions",
+        "platforms": ["ios", "android", "web"],
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "icon": "./assets/images/icono-app.png",
+        "scheme": "myapp",
+        "splash": {
+            "image": "./assets/images/logo-app.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#b7c62f"
+        },
+        "updates": {
+            "fallbackToCacheTimeout": 0
+        },
+        "assetBundlePatterns": ["**/*"],
+        "web": {
+            "favicon": "./assets/images/icono-app.png"
+        },
+        "sdkVersion": "37.0.0",
+        "android": {
+            "package": "com.designingsolutions.smartech",
+            "versionCode": 1,
+            "permissions": ["CAMERA", "CAMERA_ROLL", "NOTIFICATIONS"],
+            "googleServicesFile": "./google-services.json"
+        },
+        "ios": {
+            "bundleIdentifier": "com.designingsolutions.smartech"
+        }
     }
-  }
 }
