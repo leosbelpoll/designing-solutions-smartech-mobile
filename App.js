@@ -88,6 +88,7 @@ export default function App(props) {
     const _handleNotification = (notification) => {
         Vibration.vibrate();
         // Do something with the notification.data
+        console.log(notification.data);
     };
 
     if (!isLoadingComplete && !props.skipLoadingScreen) {

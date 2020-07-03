@@ -28,6 +28,9 @@
         },
         "ios": {
             "bundleIdentifier": "com.designingsolutions.smartech"
+        },
+        "notification": {
+            "icon": "./assets/images/icono-app.png"
         }
     }
 }
