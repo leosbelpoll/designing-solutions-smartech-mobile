@@ -1,5 +1,6 @@
-export const BASE_URL = "http://161.35.112.42";
+// export const BASE_URL = "http://161.35.112.42";
 // export const BASE_URL = "http://192.168.1.6:8000";
+export const BASE_URL = "http://smartech-app.com";
 
 export const API_URL = BASE_URL + "/api";
 

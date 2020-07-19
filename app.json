@@ -1,7 +1,7 @@
 {
     "expo": {
-        "name": "designin-solutions",
-        "slug": "designin-solutions",
+        "name": "Smartech App",
+        "slug": "smartech-app",
         "platforms": ["ios", "android", "web"],
         "version": "1.0.0",
         "orientation": "portrait",
