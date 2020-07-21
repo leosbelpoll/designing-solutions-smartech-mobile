@@ -21,13 +21,13 @@
         },
         "sdkVersion": "37.0.0",
         "android": {
-            "package": "com.designingsolutions.smartech",
+            "package": "com.designingsolutions.smartechapp",
             "versionCode": 1,
             "permissions": ["CAMERA", "CAMERA_ROLL", "NOTIFICATIONS"],
             "googleServicesFile": "./google-services.json"
         },
         "ios": {
-            "bundleIdentifier": "com.designingsolutions.smartech"
+            "bundleIdentifier": "com.designingsolutions.smartechapp"
         },
         "notification": {
             "icon": "./assets/images/icono-app.png"
